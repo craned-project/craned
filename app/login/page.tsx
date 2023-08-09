@@ -22,7 +22,7 @@ export default function Login() {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     })
-    router.refresh()
+    router.push("/")
   }
 
   const handleSignIn = async () => {
@@ -30,7 +30,7 @@ export default function Login() {
       email,
       password,
     })
-    router.refresh()
+    router.push("/")
   }
 
   const handleSignOut = async () => {
