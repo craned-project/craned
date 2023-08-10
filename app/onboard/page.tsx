@@ -27,14 +27,12 @@ export default function OnBoard() {
           .from('users')
           .select('*')
           .in('id', [userid]);
-        console.log(error)
-        console.log(users)
         //@ts-ignore
-        if (users.length == 0) {
-          setIsOnboarded(false)
+        if (users.length === 0) {
+          setIsOnboarded(true)
         }
         else {
-          setIsOnboarded(true)
+          setIsOnboarded(false)
         }
       }
     };
@@ -44,10 +42,7 @@ export default function OnBoard() {
 
   return (
     <>
-      {email} {userid}
-      {isOnboarded
-        ? "on boarded"
-        : "no"}
+      test? {email} {userid} {isOnboarded} fuck
     </>
   )
 }
