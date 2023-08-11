@@ -10,7 +10,6 @@ export default function OnBoard() {
   const supabase = createClientComponentClient<Database>();
   const [email, setEmail] = useState("");
   const [userid, setUserid] = useState("");
-  const [isOnboarded, setIsOnboarded] = useState(false);
   const { push } = useRouter();
   useEffect(() => {
     const fetchSession = async () => {
@@ -30,11 +29,9 @@ export default function OnBoard() {
         console.log(error)
         console.log(users)
         //@ts-ignore
+        console.log(users);
         if (users.length == 0) {
-          setIsOnboarded(false)
-        }
-        else {
-          setIsOnboarded(true)
+          push("/onboard")
         }
       }
     };
@@ -45,9 +42,6 @@ export default function OnBoard() {
   return (
     <>
       {email} {userid}
-      {isOnboarded
-        ? "on boarded"
-        : "no"}
     </>
   )
 }
