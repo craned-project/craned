@@ -60,6 +60,13 @@ export default function OnBoard() {
 
     }
     x.current = { ...x.current, username: username, name: name };
+    const userData = {
+      id: userid,
+      username: username,
+      name: name
+    };
+
+    await upsertUser(userData);
   };
   const handleFileChange = (event) => {
     const imageFile = event.target.files[0]; // Only one file can be selected
