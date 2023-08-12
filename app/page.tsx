@@ -9,7 +9,9 @@ import { storageClient } from '@/lib/storage';
 export default function OnBoard() {
   const supabase = createClientComponentClient<Database>();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
+  const [name, setName] = useState("");
   const { push } = useRouter();
   useEffect(() => {
     const fetchSession = async () => {
@@ -25,13 +27,15 @@ export default function OnBoard() {
         const { data: users, error } = await supabase
           .from('users')
           .select('*')
-          .in('id', [userid]);
+          .eq('id', fetchedSession.user.id);
         console.log(error)
         console.log(users)
         //@ts-ignore
-        console.log(users);
-        if (users.length == 0) {
-          push("/onboard")
+        if (users && users.length > 0) {
+          setName(users[0].name)
+          setUsername(users[0].username)
+        } else {
+          push("/onboard");
         }
       }
     };
@@ -41,7 +45,8 @@ export default function OnBoard() {
 
   return (
     <>
-      {email} {userid}
+      {/* {email} {userid} */}
+      Welcome {name} (@{username})!
     </>
   )
 }
