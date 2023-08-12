@@ -131,20 +131,23 @@ export interface Database {
       }
       users: {
         Row: {
+          bio: string | null
           id: string
-          profile_picture: string | null
+          name: string
           school_id: string | null
           username: string
         }
         Insert: {
+          bio?: string | null
           id: string
-          profile_picture?: string | null
+          name: string
           school_id?: string | null
           username: string
         }
         Update: {
+          bio?: string | null
           id?: string
-          profile_picture?: string | null
+          name?: string
           school_id?: string | null
           username?: string
         }

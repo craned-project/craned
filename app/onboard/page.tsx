@@ -11,6 +11,7 @@ export default function OnBoard() {
   const [email, setEmail] = useState("");
   const [userid, setUserid] = useState("");
   const [username, setUsername] = useState("");
+  const [bio, setBio] = useState<string | null>("");
   const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState("");
   var x = useRef<any>(null);
@@ -34,6 +35,10 @@ export default function OnBoard() {
 
   const handleNameChange = (event) => {
     setName(event.target.value);
+  }
+
+  const handleBio = (event) => {
+    setBio(event.target.value);
   }
 
   const handleFormSubmit = async (event) => {
@@ -60,11 +65,14 @@ export default function OnBoard() {
 
     }
     x.current = { ...x.current, username: username, name: name };
-    const userData = {
+    var userData;
+    userData = {
       id: userid,
-      username: username,
-      name: name
-    };
+      username,
+      name,
+      bio,
+    }
+
 
     await upsertUser(userData);
   };
@@ -91,6 +99,7 @@ export default function OnBoard() {
           x.current = user[0];  // Set the x value to the user
           setUsername(user[0].username)
           setName(user[0].name)
+          setBio(user[0].bio)
         } else {
           x.current = null;  // Set the x value to null
           // Upsert new user data
@@ -123,6 +132,10 @@ export default function OnBoard() {
         <label>
           Name:
           <input type="text" value={name} onChange={handleNameChange} required />
+        </label>
+        <label>
+          Bio:
+          <input type="text" value={bio == null ? "" : bio} onChange={handleBio} />
         </label>
         <label>
           Profile Picture:
