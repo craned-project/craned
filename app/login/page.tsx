@@ -40,12 +40,13 @@ export default function Login() {
 
   return (
     <>
-      <input name="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+      <input name="email" onChange={(e) => setEmail(e.target.value)} value={email} className='text-black'/>
       <input
         type="password"
         name="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
+        className='text-black'
       />
       <button onClick={handleSignUp}>Sign up</button>
       <button onClick={handleSignIn}>Sign in</button>
