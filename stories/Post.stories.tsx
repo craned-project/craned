@@ -17,5 +17,13 @@ type Story = StoryObj<typeof Post>;
  * to learn how to use render functions.
  */
 export const Primary: Story = {
-  render: () => <Post>Test</Post>,
+  args: {
+    name: 'hansnnn',
+    username: 'shitsanupong',
+    date: '12/12/2551',
+    desc: "test",
+    image: "https://i.kym-cdn.com/photos/images/newsfeed/002/409/671/179.png",
+    pfp: "https://ih1.redbubble.net/image.3578697790.8184/st,small,507x507-pad,600x600,f8f8f8.u2.jpg"
+  },
+  component: Post,
 };
