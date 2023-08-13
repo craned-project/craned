@@ -15,7 +15,13 @@ export default function OnBoard() {
   const [profileImage, setProfileImage] = useState(null);
   const [postData, setPostData] = useState("");
   const [name, setName] = useState("");
-  var x = useRef<any>(null);
+  var x = useRef<{
+    bio: string | null
+    id: string
+    name: string
+    school_id: string | null
+    username: string
+  }>(null);
   const { push, refresh } = useRouter();
   const createPost = async (post) => {
     const { error } = await supabase.from('posts').insert({

@@ -14,7 +14,13 @@ export default function OnBoard() {
   const [bio, setBio] = useState<string | null>("");
   const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState("");
-  var x = useRef<any>(null);
+  var x = useRef<{
+    bio: string | null
+    id: string
+    name: string
+    school_id: string | null
+    username: string
+  }>(null);
   const { push, refresh } = useRouter();
 
   async function upsertUser(userData) {
