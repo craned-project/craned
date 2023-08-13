@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import Post from '@/stories/Post'
 "use client";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect } from 'react';

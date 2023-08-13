@@ -25,3 +25,9 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@font-face {
+  font-family: 'overpass'; /* This is the name you'll use to reference the font */
+  src: url('../public/font/overpass.ttf') format('ttf'),;
+  /* Add other font properties if needed, like font-weight and font-style */
+}
