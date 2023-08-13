@@ -10,9 +10,22 @@ export default function OnBoard() {
   const supabase = createClientComponentClient<Database>();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [schoolName, setSchoolName] = useState("");
   const [userid, setUserid] = useState("");
+  const [schoolId, setSchoolId] = useState("");
   const [name, setName] = useState("");
   const { push } = useRouter();
+  const getSchoolName = async (schoolId: string) => {
+    const { data: schoolName, error } = await supabase.from('schools').select("*").eq('id', schoolId);
+    if (schoolName && schoolName?.length > 0) {
+      console.log(schoolName)
+      return schoolName[0].name
+    }
+    else {
+      console.error(schoolName, error)
+      return ""
+    }
+  }
   useEffect(() => {
     const fetchSession = async () => {
       const { data: { session: fetchedSession } } = await supabase.auth.getSession();
@@ -30,10 +43,14 @@ export default function OnBoard() {
           .eq('id', fetchedSession.user.id);
         console.log(error)
         console.log(users)
-        //@ts-ignore
         if (users && users.length > 0) {
           setName(users[0].name)
           setUsername(users[0].username)
+          if (users[0].school_id) {
+            setSchoolId(users[0].school_id)
+            setSchoolName(await getSchoolName(users[0].school_id));
+            console.log(schoolId)
+          }
         } else {
           push("/onboard");
         }
@@ -46,7 +63,7 @@ export default function OnBoard() {
   return (
     <>
       {/* {email} {userid} */}
-      Welcome {name} (@{username})!
+      Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
     </>
   )
 }
