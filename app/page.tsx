@@ -76,7 +76,7 @@ export default function OnBoard() {
     <>
       {/* {email} {userid} */}
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
-      Recent Posts
+      <br />Recent Posts <br />
       {latestPosts.map(post => <>{post.content}<br /></>)}
 
     </>
