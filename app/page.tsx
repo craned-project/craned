@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 
 import type { Database } from '@/supabase.types'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { storageClient } from '@/lib/storage';
 import { getPfpUrl } from '@/lib/getPfpUrl';
 import Image from 'next/image';
 
