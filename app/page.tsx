@@ -79,8 +79,32 @@ export default function OnBoard() {
       {/* {email} {userid} */}
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
       <br />Recent Posts <br />
-      {latestPosts.map(post => <div key={post.id}><Image src={getPfpUrl(post.user_id)} width={300} height={300} alt='image' />{post.content}<br /></div>)}
-
+      {latestPosts.map(post =>
+        <div key={post.id}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start', // Align items to the start
+            overflowX: 'auto' // Allow scrolling when content is too large
+          }}>
+          <div
+            style={{
+              width: '100px',
+              height: '100px',
+              overflow: 'hidden',
+              marginRight: '15px', // Add some space between the image and the content
+              position: 'relative'
+            }}>
+            <Image
+              src={getPfpUrl(post.user_id)}
+              alt='Profile Image'
+              layout='fill'
+              objectFit='cover'
+            />
+          </div>
+          <div style={{ maxWidth: "70%" }}>{post.content}</div>
+        </div>
+      )}
     </>
   )
 }
