@@ -1,13 +1,11 @@
+"use client";
 import Image from 'next/image'
 import Post from '@/stories/Post'
-"use client";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect } from 'react';
-
 import type { Database } from '@/supabase.types'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getPfpUrl } from '@/lib/getPfpUrl';
-import Image from 'next/image';
 
 const getPagination = (page: number, size: number) => {
   const limit = size ? +size : 3
