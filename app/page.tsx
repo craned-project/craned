@@ -3,14 +3,47 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect } from 'react';
 
 import type { Database } from '@/supabase.types'
-import { useRouter } from 'next/navigation'
-import { storageClient } from '@/lib/storage';
+import { useRouter, useSearchParams } from 'next/navigation'
+import { getPfpUrl } from '@/lib/getPfpUrl';
+import Image from 'next/image';
 
-export default function OnBoard() {
+const getPagination = (page: number, size: number) => {
+  const limit = size ? +size : 3
+  const from = page ? page * limit : 0
+  const to = page ? from + size - 1 : size - 1
+
+  return { from, to }
+}
+
+export default function Home() {
   const supabase = createClientComponentClient<Database>();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [schoolName, setSchoolName] = useState("");
   const [userid, setUserid] = useState("");
+  const [page, setPage] = useState(0);
+  const [latestPosts, setLatestPosts] = useState<{
+    content: string
+    id: string
+    school_id: string
+    timestamp: string
+    user_id: string
+  }[]>([]);
+  const searchParam = useSearchParams();
+  const [schoolId, setSchoolId] = useState("");
+  const [name, setName] = useState("");
   const { push } = useRouter();
+  const getSchoolName = async (schoolId: string) => {
+    const { data: schoolName, error } = await supabase.from('schools').select("*").eq('id', schoolId);
+    if (schoolName && schoolName?.length > 0) {
+      console.log(schoolName)
+      return schoolName[0].name
+    }
+    else {
+      console.error(schoolName, error)
+      return ""
+    }
+  }
   useEffect(() => {
     const fetchSession = async () => {
       const { data: { session: fetchedSession } } = await supabase.auth.getSession();
@@ -25,13 +58,29 @@ export default function OnBoard() {
         const { data: users, error } = await supabase
           .from('users')
           .select('*')
-          .in('id', [userid]);
+          .eq('id', fetchedSession.user.id);
         console.log(error)
         console.log(users)
-        //@ts-ignore
-        console.log(users);
-        if (users.length == 0) {
-          push("/onboard")
+        if (users && users.length > 0) {
+          setName(users[0].name)
+          setUsername(users[0].username)
+          if (users[0].school_id) {
+            setSchoolId(users[0].school_id)
+            setSchoolName(await getSchoolName(users[0].school_id));
+            console.log(schoolId)
+            const page = parseInt(searchParam.get('page') || "0")
+            console.log("page: " + page);
+            setPage(page);
+            const { from, to } = getPagination(page, 3);
+            const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).range(from, to);
+            setLatestPosts(posts);
+            console.log(posts)
+          }
+          else {
+            push("https://google.com") // Do something about it later. For users who didn't have school yet
+          }
+        } else {
+          push("/onboard");
         }
       }
     };
@@ -41,7 +90,37 @@ export default function OnBoard() {
 
   return (
     <>
-      {email} {userid}
+      {/* {email} {userid} */}
+      Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
+      <br />Recent Posts <br />
+      {latestPosts.length > 0 ? latestPosts.map(post =>
+        <div key={post.id}
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start', // Align items to the start
+            overflowX: 'auto' // Allow scrolling when content is too large
+          }}>
+          <div
+            style={{
+              width: '100px',
+              height: '100px',
+              overflow: 'hidden',
+              marginRight: '15px', // Add some space between the image and the content
+              position: 'relative'
+            }}>
+            <Image
+              src={getPfpUrl(post.user_id)}
+              alt='Profile Image'
+              layout='fill'
+              objectFit='cover'
+            />
+          </div>
+          <div style={{ maxWidth: "70%" }}>{post.content}</div>
+        </div>
+      ) : "No post left :)"}
+      <br />
+      {latestPosts.length != 3 ? "No more post left ;-;" : <a href={"/?page=" + (page + 1)}>Next page</a>}
     </>
   )
 }
