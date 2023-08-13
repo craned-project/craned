@@ -12,6 +12,13 @@ export default function OnBoard() {
   const [username, setUsername] = useState("");
   const [schoolName, setSchoolName] = useState("");
   const [userid, setUserid] = useState("");
+  const [latestPosts, setLatestPosts] = useState<{
+    content: string
+    id: string
+    school_id: string
+    timestamp: string
+    user_id: string
+  }[]>([]);
   const [schoolId, setSchoolId] = useState("");
   const [name, setName] = useState("");
   const { push } = useRouter();
@@ -50,6 +57,11 @@ export default function OnBoard() {
             setSchoolId(users[0].school_id)
             setSchoolName(await getSchoolName(users[0].school_id));
             console.log(schoolId)
+            const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).limit(5);
+            setLatestPosts(posts);
+          }
+          else {
+            push("https://google.com") // Do something about it later. For users who didn't have school yet
           }
         } else {
           push("/onboard");
@@ -64,6 +76,9 @@ export default function OnBoard() {
     <>
       {/* {email} {userid} */}
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
+      Recent Posts
+      {latestPosts.map(post => <>{post.content}<br /></>)}
+
     </>
   )
 }
