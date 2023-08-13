@@ -1,11 +1,28 @@
 "use client";
-import Image from 'next/image'
+import Image, { ImageProps } from 'next/image'
 import Post from '@/stories/Post'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect } from 'react';
 import type { Database } from '@/supabase.types'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getPfpUrl } from '@/lib/getPfpUrl';
+
+
+const ImageWithFallback = (props: { src: string, fallbackSrc: string, alt: string } & ImageProps) => {
+  const { src, fallbackSrc, alt, ...rest } = props;
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <Image
+      {...rest}
+      src={imgSrc}
+      alt={alt}
+      onError={() => {
+        setImgSrc(fallbackSrc);
+      }}
+    />
+  );
+};
 
 const getPagination = (page: number, size: number) => {
   const limit = size ? +size : 3
@@ -109,11 +126,12 @@ export default function Home() {
               marginRight: '15px', // Add some space between the image and the content
               position: 'relative'
             }}>
-            <Image
+            <ImageWithFallback
               src={getPfpUrl(post.user_id)}
               alt='Profile Image'
               layout='fill'
               objectFit='cover'
+              fallbackSrc='/uwoog.png'
             />
           </div>
           <div style={{ maxWidth: "70%" }}>{post.content}</div>
