@@ -3,17 +3,26 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect } from 'react';
 
 import type { Database } from '@/supabase.types'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { storageClient } from '@/lib/storage';
 import { getPfpUrl } from '@/lib/getPfpUrl';
 import Image from 'next/image';
 
-export default function OnBoard() {
+const getPagination = (page: number, size: number) => {
+  const limit = size ? +size : 3
+  const from = page ? page * limit : 0
+  const to = page ? from + size - 1 : size - 1
+
+  return { from, to }
+}
+
+export default function Home() {
   const supabase = createClientComponentClient<Database>();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [schoolName, setSchoolName] = useState("");
   const [userid, setUserid] = useState("");
+  const [page, setPage] = useState(0);
   const [latestPosts, setLatestPosts] = useState<{
     content: string
     id: string
@@ -21,6 +30,7 @@ export default function OnBoard() {
     timestamp: string
     user_id: string
   }[]>([]);
+  const searchParam = useSearchParams();
   const [schoolId, setSchoolId] = useState("");
   const [name, setName] = useState("");
   const { push } = useRouter();
@@ -59,8 +69,13 @@ export default function OnBoard() {
             setSchoolId(users[0].school_id)
             setSchoolName(await getSchoolName(users[0].school_id));
             console.log(schoolId)
-            const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).limit(5);
+            const page = parseInt(searchParam.get('page') || "0")
+            console.log("page: " + page);
+            setPage(page);
+            const { from, to } = getPagination(page, 3);
+            const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).range(from, to);
             setLatestPosts(posts);
+            console.log(posts)
           }
           else {
             push("https://google.com") // Do something about it later. For users who didn't have school yet
@@ -79,7 +94,7 @@ export default function OnBoard() {
       {/* {email} {userid} */}
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
       <br />Recent Posts <br />
-      {latestPosts.map(post =>
+      {latestPosts.length > 0 ? latestPosts.map(post =>
         <div key={post.id}
           style={{
             display: 'flex',
@@ -104,7 +119,9 @@ export default function OnBoard() {
           </div>
           <div style={{ maxWidth: "70%" }}>{post.content}</div>
         </div>
-      )}
+      ) : "No post left :)"}
+      <br />
+      {latestPosts.length != 3 ? "No more post left ;-;" : <a href={"/?page=" + (page + 1)}>Next page</a>}
     </>
   )
 }
