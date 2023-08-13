@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import type { Database } from '@/supabase.types'
 import { useRouter } from 'next/navigation'
 import { storageClient } from '@/lib/storage';
+import { getPfpUrl } from '@/lib/getPfpUrl';
+import Image from 'next/image';
 
 export default function OnBoard() {
   const supabase = createClientComponentClient<Database>();
@@ -77,7 +79,7 @@ export default function OnBoard() {
       {/* {email} {userid} */}
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
       <br />Recent Posts <br />
-      {latestPosts.map(post => <div key={post.id}>{post.content}<br /></div>)}
+      {latestPosts.map(post => <div key={post.id}><Image src={getPfpUrl(post.user_id)} width={300} height={300} alt='image' />{post.content}<br /></div>)}
 
     </>
   )
