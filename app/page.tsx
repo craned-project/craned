@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import Image, { ImageProps } from 'next/image'
 import Post from '@/stories/Post'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import type { Database } from '@/supabase.types'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getPfpUrl } from '@/lib/getPfpUrl';
+import { getLike } from '@/lib/newlike';
 
 
 const ImageWithFallback = (props: { src: string, fallbackSrc: string, alt: string } & ImageProps) => {
@@ -39,13 +40,17 @@ export default function Home() {
   const [schoolName, setSchoolName] = useState("");
   const [userid, setUserid] = useState("");
   const [page, setPage] = useState(0);
-  const [latestPosts, setLatestPosts] = useState<{
-    content: string
-    id: string
-    school_id: string
-    timestamp: string
-    user_id: string
-  }[]>([]);
+  const [latestPosts, setLatestPosts] = useState<
+    {
+      post: {
+        content: string
+        id: string
+        school_id: string
+        timestamp: string
+        user_id: string
+      },
+      like: boolean
+    }[]>([]);
   const searchParam = useSearchParams();
   const [schoolId, setSchoolId] = useState("");
   const [name, setName] = useState("");
@@ -90,7 +95,10 @@ export default function Home() {
             setPage(page);
             const { from, to } = getPagination(page, 3);
             const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).range(from, to);
-            setLatestPosts(posts);
+            let realpost = await Promise.all(posts?.map(async (post) => {
+              return { post: post, like: await getLike(users[0].id, post.id) };
+            }));
+            setLatestPosts(realpost);
             console.log(posts)
           }
           else {
@@ -111,7 +119,7 @@ export default function Home() {
       Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
       <br />Recent Posts <br />
       {latestPosts.length > 0 ? latestPosts.map(post =>
-        <div key={post.id}
+        <div key={post.post.id}
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -127,14 +135,15 @@ export default function Home() {
               position: 'relative'
             }}>
             <ImageWithFallback
-              src={getPfpUrl(post.user_id)}
+              src={getPfpUrl(post.post.user_id)}
               alt='Profile Image'
               style={{ objectFit: "cover" }}
               fill={true}
               fallbackSrc='/uwoog.png'
             />
           </div>
-          <div style={{ maxWidth: "70%" }}>{post.content}</div>
+          <div style={{ maxWidth: "70%" }}>{post.post.content}</div>
+          <div>Like: {post.like ? "Yes" : "No"}</div>
         </div>
       ) : "No post left :)"}
       <br />
