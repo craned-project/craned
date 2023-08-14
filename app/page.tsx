@@ -129,8 +129,8 @@ export default function Home() {
             <ImageWithFallback
               src={getPfpUrl(post.user_id)}
               alt='Profile Image'
-              layout='fill'
-              objectFit='cover'
+              style={{ objectFit: "cover" }}
+              fill={true}
               fallbackSrc='/uwoog.png'
             />
           </div>
