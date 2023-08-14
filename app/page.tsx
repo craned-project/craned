@@ -8,7 +8,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { getPfpUrl } from '@/lib/getPfpUrl';
 import { getLike } from '@/lib/newlike';
 
-
 const ImageWithFallback = (props: { src: string, fallbackSrc: string, alt: string } & ImageProps) => {
   const { src, fallbackSrc, alt, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
@@ -35,120 +34,170 @@ const getPagination = (page: number, size: number) => {
 
 export default function Home() {
   const supabase = createClientComponentClient<Database>();
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [schoolName, setSchoolName] = useState("");
-  const [userid, setUserid] = useState("");
-  const [page, setPage] = useState(0);
-  const [latestPosts, setLatestPosts] = useState<
-    {
-      post: {
-        content: string
-        id: string
-        school_id: string
-        timestamp: string
-        user_id: string
-      },
-      like: boolean
-    }[]>([]);
-  const searchParam = useSearchParams();
-  const [schoolId, setSchoolId] = useState("");
-  const [name, setName] = useState("");
-  const { push } = useRouter();
-  const getSchoolName = async (schoolId: string) => {
-    const { data: schoolName, error } = await supabase.from('schools').select("*").eq('id', schoolId);
-    if (schoolName && schoolName?.length > 0) {
-      console.log(schoolName)
-      return schoolName[0].name
-    }
-    else {
-      console.error(schoolName, error)
-      return ""
-    }
-  }
+  const [userData, setUserData] = useState(null);
+  const [latestPosts, setLatestPosts] = useState([]);
+  const [likeStatus, setLikeStatus] = useState([]);
+
+  const router = useRouter();
+  const page = parseInt(useSearchParams().get("page") || "0");
+
   useEffect(() => {
-    const fetchSession = async () => {
-      const { data: { session: fetchedSession } } = await supabase.auth.getSession();
-      if (fetchedSession) { }
-      else {
-        push("/login")
+    const fetchUserData = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+        return;
       }
-      if (fetchedSession) {
-        //@ts-ignore
-        setEmail(fetchedSession.user.email);
-        setUserid(fetchedSession.user.id);
-        const { data: users, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', fetchedSession.user.id);
-        console.log(error)
-        console.log(users)
-        if (users && users.length > 0) {
-          setName(users[0].name)
-          setUsername(users[0].username)
-          if (users[0].school_id) {
-            setSchoolId(users[0].school_id)
-            setSchoolName(await getSchoolName(users[0].school_id));
-            console.log(schoolId)
-            const page = parseInt(searchParam.get('page') || "0")
-            console.log("page: " + page);
-            setPage(page);
-            const { from, to } = getPagination(page, 3);
-            const { data: posts, error } = await supabase.from('posts').select("*").eq('school_id', users[0].school_id).order('timestamp', { ascending: false }).range(from, to);
-            let realpost = await Promise.all(posts?.map(async (post) => {
-              return { post: post, like: await getLike(users[0].id, post.id) };
-            }));
-            setLatestPosts(realpost);
-            console.log(posts)
-          }
-          else {
-            push("https://google.com") // Do something about it later. For users who didn't have school yet
-          }
-        } else {
-          push("/onboard");
-        }
+
+      const { data: user, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) {
+        console.error(error);
+        router.push("/onboard");
+        return;
+      }
+
+      setUserData(user);
+
+      if (!user.school_id) {
+        router.push("https://google.com"); // Redirect to a default page for users who haven't set their school
+        return;
+      }
+
+      const { data: school } = await supabase
+        .from("schools")
+        .select("name")
+        .eq("id", user.school_id)
+        .single();
+
+      if (school) {
+        setUserData((prevUserData) => ({ ...prevUserData, schoolName: school.name }));
+      }
+      const { from, to } = getPagination(page, 3)
+      const { data: posts } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("school_id", user.school_id)
+        .order("timestamp", { ascending: false })
+        .range(from, to)
+
+      if (posts) {
+        setLatestPosts(posts);
+
+        const postLikeStatus = await Promise.all(
+          posts.map(async (post) => {
+            const { data: liked } = await supabase
+              .from("likes")
+              .select("*")
+              .match({ user_id: user.id, post_id: post.id });
+
+            // Check if a like status exists for the post
+            const isLiked = liked && liked.length > 0;
+            console.log(post.id, isLiked);
+            return { id: post.id, likestatus: isLiked };
+          })
+        );
+        console.log(postLikeStatus)
+        setLikeStatus(postLikeStatus);
       }
     };
 
-    fetchSession();
+    fetchUserData();
   }, []);
+
+  const handleLikeToggle = async (postId) => {
+    const currentLikeStatus = likeStatus.find((item) => item.id === postId)?.likestatus;
+    const newLikeStatus = currentLikeStatus ? false : true;
+
+    setLikeStatus((prevLikeStatus) => {
+      const updatedLikeStatus = prevLikeStatus.map((item) => {
+        if (item.id === postId) {
+          return { ...item, likestatus: newLikeStatus };
+        }
+        return item;
+      });
+      return updatedLikeStatus;
+    });
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    if (newLikeStatus) {
+      const { data, error } = await supabase
+        .from("likes")
+        .insert([{ user_id: session.user.id, post_id: postId }]);
+      if (error) {
+        console.error(error);
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("likes")
+        .delete()
+        .match({ user_id: session.user.id, post_id: postId });
+      if (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <>
-      {/* {email} {userid} */}
-      Welcome {name} (@{username}){schoolName ? " " + "(" + schoolName + ")" : ""}!
-      <br />Recent Posts <br />
-      {latestPosts.length > 0 ? latestPosts.map(post =>
-        <div key={post.post.id}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start', // Align items to the start
-            overflowX: 'auto' // Allow scrolling when content is too large
-          }}>
-          <div
-            style={{
-              width: '100px',
-              height: '100px',
-              overflow: 'hidden',
-              marginRight: '15px', // Add some space between the image and the content
-              position: 'relative'
-            }}>
-            <ImageWithFallback
-              src={getPfpUrl(post.post.user_id)}
-              alt='Profile Image'
-              style={{ objectFit: "cover" }}
-              fill={true}
-              fallbackSrc='/uwoog.png'
-            />
-          </div>
-          <div style={{ maxWidth: "70%" }}>{post.post.content}</div>
-          <div>Like: {post.like ? "Yes" : "No"}</div>
-        </div>
-      ) : "No post left :)"}
-      <br />
-      {latestPosts && latestPosts.length == 3 && <a href={"/users/" + name + "?page=" + (page + 1)}>Go to next page</a>}
-      {latestPosts && page != 0 && <a href={"/users/" + name + "?page=" + (page - 1)}>Go to before bage</a>}
+      {userData && (
+        <>
+          Welcome {userData.name} (@{userData.username}) {userData.schoolName && `(${userData.schoolName})`}!
+          <br />
+          Recent Posts <br />
+          {latestPosts.length > 0 ? (
+            latestPosts.map((post) => (
+              <div
+                key={post.id}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  overflowX: "auto",
+                }}
+              >
+                <div
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    overflow: "hidden",
+                    marginRight: "15px",
+                    position: "relative",
+                  }}
+                >
+                  <ImageWithFallback
+                    src={getPfpUrl(post.user_id)}
+                    alt="Profile Image"
+                    style={{ objectFit: "cover" }}
+                    fallbackSrc='/uwoog.png'
+                    fill={true}
+                  />
+                </div>
+                <div style={{ maxWidth: "70%" }}>{post.content}</div>
+                <div
+                  onClick={() => handleLikeToggle(post.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Like: {likeStatus.find(item => item.id == post.id)?.likestatus ? "Yes" : "No"}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No posts available.</p>
+          )}
+          {latestPosts && latestPosts.length == 3 && <a href={"/?page=" + (page + 1)}>Go to next page</a>}
+          {latestPosts && page != 0 && <a href={"/?page=" + (page - 1)}>Go to before bage</a>}
+        </>
+      )}
     </>
-  )
+  );
 }
