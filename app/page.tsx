@@ -138,7 +138,8 @@ export default function Home() {
         </div>
       ) : "No post left :)"}
       <br />
-      {latestPosts.length != 3 ? "No more post left ;-;" : <a href={"/?page=" + (page + 1)}>Next page</a>}
+      {latestPosts && latestPosts.length == 3 && <a href={"/users/" + name + "?page=" + (page + 1)}>Go to next page</a>}
+      {latestPosts && page != 0 && <a href={"/users/" + name + "?page=" + (page - 1)}>Go to before bage</a>}
     </>
   )
 }
