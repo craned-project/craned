@@ -34,9 +34,9 @@ const getPagination = (page: number, size: number) => {
 
 export default function Home() {
   const supabase = createClientComponentClient<Database>();
-  const [userData, setUserData] = useState(null);
-  const [latestPosts, setLatestPosts] = useState([]);
-  const [likeStatus, setLikeStatus] = useState([]);
+  const [userData, setUserData] = useState<{ id: string, username: string, name: string, school_id: string, bio: string, schoolName: string }>(null);
+  const [latestPosts, setLatestPosts] = useState<{ id: string, content: string, timestamp: string, user_id: string, school_id: string }[]>([]);
+  const [likeStatus, setLikeStatus] = useState<{ id: string, likestatus: boolean }[]>([]);
 
   const router = useRouter();
   const page = parseInt(useSearchParams().get("page") || "0");
@@ -98,10 +98,9 @@ export default function Home() {
             // Check if a like status exists for the post
             const isLiked = liked && liked.length > 0;
             console.log(post.id, isLiked);
-            return { id: post.id, likestatus: isLiked };
+            return { id: post.id, likestatus: isLiked || false };
           })
         );
-        console.log(postLikeStatus)
         setLikeStatus(postLikeStatus);
       }
     };
