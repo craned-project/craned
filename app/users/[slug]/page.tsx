@@ -36,6 +36,7 @@ export default function UserPage({ params }: { params: { slug: string } }) {
   const searchParam = useSearchParams();
   const [name, setName] = useState("");
   const { push } = useRouter();
+  const [likeStatus, setLikeStatus] = useState<{ id: string, likestatus: boolean }[]>([]);
   const [latestPosts, setLatestPosts] = useState<{
     content: string
     id: string
@@ -70,14 +71,65 @@ export default function UserPage({ params }: { params: { slug: string } }) {
         const { from, to } = getPagination(page, 3);
         const { data: posts, error } = await supabase.from('posts').select("*").eq('user_id', users[0].id).order('timestamp', { ascending: false }).range(from, to);
         setLatestPosts(posts || []);
+        const postLikeStatus = await Promise.all(
+          posts.map(async (post) => {
+            const { data: liked } = await supabase
+              .from("likes")
+              .select("*")
+              .match({ user_id: users[0].id, post_id: post.id });
+
+            // Check if a like status exists for the post
+            const isLiked = liked && liked.length > 0;
+            console.log(post.id, isLiked);
+            return { id: post.id, likestatus: isLiked || false };
+          })
+        );
+        setLikeStatus(postLikeStatus);
         console.log(posts);
       } else {
         setLatestPosts(null);
       }
-    };
 
-    fetchSession();
-  }, []);
+    }
+    fetchSession()
+  }, [params.slug, searchParam, supabase]);
+  const handleLikeToggle = async (postId) => {
+    const currentLikeStatus = likeStatus.find((item) => item.id === postId)?.likestatus;
+    const newLikeStatus = currentLikeStatus ? false : true;
+
+    setLikeStatus((prevLikeStatus) => {
+      const updatedLikeStatus = prevLikeStatus.map((item) => {
+        if (item.id === postId) {
+          return { ...item, likestatus: newLikeStatus };
+        }
+        return item;
+      });
+      return updatedLikeStatus;
+    });
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      push("/login");
+      return;
+    }
+
+    if (newLikeStatus) {
+      const { data, error } = await supabase
+        .from("likes")
+        .insert([{ user_id: session.user.id, post_id: postId }]);
+      if (error) {
+        console.error(error);
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("likes")
+        .delete()
+        .match({ user_id: session.user.id, post_id: postId });
+      if (error) {
+        console.error(error);
+      }
+    }
+  };
   return (<div>
     <>slug: {params.slug}</>
     <><>
@@ -108,6 +160,12 @@ export default function UserPage({ params }: { params: { slug: string } }) {
                 />
               </div>
               <div style={{ maxWidth: "70%" }}>{post.content}</div>
+              <div
+                onClick={() => handleLikeToggle(post.id)}
+                style={{ cursor: "pointer" }}
+              >
+                Like: {likeStatus.find(item => item.id == post.id)?.likestatus ? "Yes" : "No"}
+              </div>
             </div>
           ) : "No post left :,("
       }</>
