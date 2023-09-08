@@ -1,13 +1,7 @@
-"use client";
-import { useOrganization } from '@clerk/nextjs';
-import { useState } from 'react';
 import { redirect } from 'next/navigation';
-export default function layout() {
-    const { organization, membership } = useOrganization();
-    if (membership.role !== "admin") {
-        redirect("/");
-    }
-    else {
-        return <></>
-    }
+import { ReactNode } from 'react';
+
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    return <>{children}</>
 }
+

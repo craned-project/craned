@@ -3,6 +3,7 @@
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
+import { CheckUser } from "./updateUser.action";
 
 interface postProps {
     text: string,
@@ -14,7 +15,7 @@ export const createNewPost = async ({ post, id: userid }: { post: postProps, id:
         await connectToDB();
 
         const author = await User.findOne({ id: userid });
-        if (author.School == null) {
+        if (!CheckUser(userid)) {
             console.log(`Author of post doesn't have school yet: ${userid}`);
             throw new Error("1");
         }
@@ -36,7 +37,7 @@ export const createNewComment = async ({ post, id: userid, toppostid }: { post: 
         await connectToDB();
 
         const author = await User.findOne({ id: userid });
-        if (author.School == null) {
+        if (!CheckUser(userid)) {
             console.log(`Author of post doesn't have school yet: ${userid}`);
             throw new Error("1");
         }
@@ -58,4 +59,10 @@ export const createNewComment = async ({ post, id: userid, toppostid }: { post: 
     }
 }
 
+export async function countPostLikes(postId: string): Promise<number> {
+  const users: User[] = await User.find({ likes: postId });
 
+  const likesCount = users.length;
+
+  return likesCount;
+}

@@ -1,11 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+import { InferSchemaType } from "mongoose";
 
 const schoolSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-  },
-  username: {
+  slug: {
     type: String,
     unique: true,
     required: true,
@@ -16,25 +13,18 @@ const schoolSchema = new mongoose.Schema({
   },
   image: String,
   bio: String,
-  createdBy: {
+  admin: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
-  threads: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
-    },
-  ],
-  members: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }],
 });
 
-const School =
-  mongoose.models.School|| mongoose.model("School", schoolSchema);
+type School = InferSchemaType<typeof schoolSchema>;
+const School: Model<School> = mongoose.models.School || mongoose.model("School", schoolSchema);
 
 export default School;

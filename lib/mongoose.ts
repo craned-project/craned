@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-
+import Post from "./models/post.model";
+import School from "./models/school.model";
+import User from "./models/user.model";
 let isConnected = false; // Variable to track the connection status
 
 export const connectToDB = async () => {
