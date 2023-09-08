@@ -1,9 +1,30 @@
 /** @type {import('next').NextConfig} */
 console.log(process.env.NEXT_PUBLIC_SMALL_SUPABASE_URL)
 const nextConfig = {
-  images: {
-    domains: [process.env.NEXT_PUBLIC_SMALL_SUPABASE_URL]
-  }
+    experimental: {
+        serverActions: true,
+        serverComponentsExternalPackages: ["mongoose"],
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "img.clerk.com",
+            },
+            {
+                protocol: "https",
+                hostname: "images.clerk.dev",
+            },
+            {
+                protocol: "https",
+                hostname: "uploadthing.com",
+            },
+            {
+                protocol: "https",
+                hostname: "placehold.co",
+            },
+        ],
+    },
 }
 
 module.exports = nextConfig
