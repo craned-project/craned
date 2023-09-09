@@ -16,8 +16,12 @@ export default async function Page() {
         bio: userInfo?.bio || "",
         image: userInfo?.image || user?.imageUrl,
     }
-    return (<main>
-        <h1 className="text-3xl">Onboarding</h1>
-        <AccountProfile user={d} title="Title" redirecturl="/" />
+    return (
+    <main className="flex justify-center items-center bg-light h-screen">
+        <div className="flex flex-col justify-center items-center bg-tri p-7 max-w-[60%] rounded-2xl">
+            <h1 className="text-3xl text-center text-pri font-overpass font-bold">Let's Get You On Board!</h1>
+            <p className="text-lg text-white">Welcome, new member! Let's continue your signing up here!</p>
+            <AccountProfile user={d} title="Title" redirecturl="/" />
+        </div>
     </main>)
 }
