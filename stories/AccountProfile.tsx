@@ -92,7 +92,9 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="">
+            <div className="flex gap-3">
+                <div className="flex-[2]">
                 <FormField
                     control={form.control}
                     name="profile_photo"
@@ -103,8 +105,8 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
                                     <Image
                                         src={field.value}
                                         alt='profile_icon'
-                                        width={100}
-                                        height={100}
+                                        width={70}
+                                        height={70}
                                         priority
                                         className='rounded-full object-contain'
                                     />
@@ -112,8 +114,8 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
                                     <Image
                                         src='/uwoog.png'
                                         alt='profile_icon'
-                                        width={100}
-                                        height={100}
+                                        width={70}
+                                        height={70}
                                         className='object-contain'
                                     />
                                 )}
@@ -130,66 +132,72 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name='name'
-                    render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2'>
-                                Name
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    type='text'
-                                    className='account-form_input no-focus'
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name='username'
-                    render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2'>
-                                Username
-                            </FormLabel>
-                            <FormControl>
-                                <Input
-                                    type='text'
-                                    className='account-form_input no-focus'
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                
+                    <FormField
+                        control={form.control}
+                        name='name'
+                        render={({ field }) => (
+                            <FormItem className='flex w-full flex-col mt-2 outline-0'>
+                                <FormControl>
+                                    <Input
+                                        type='text'
+                                        className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
+                                        placeholder='Name'
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name='username'
+                        render={({ field }) => (
+                            <FormItem className='flex items-center gap-2 w-full mt-0 outline-0'>
+                                <FormLabel className='text-semibold text-xl text-gray-500'>
+                                    @
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type='text'
+                                        className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
+                                        placeholder="Username"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    </div>
+                    <div className="flex-[2]">
+                        <FormField
+                            control={form.control}
+                            name='bio'
+                            render={({ field }) => (
+                                <FormItem className='flex flex-col mt-2 outline-0'>
+                                    <FormLabel className='text-base-semibold text-white'>
+                                        Bio
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            rows={5}
+                                            className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg resize-none'
+                                            {...field}
+                                            placeholder="Bio"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                </div>
 
-                <FormField
-                    control={form.control}
-                    name='bio'
-                    render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2'>
-                                Bio
-                            </FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    rows={10}
-                                    className='account-form_input no-focus'
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-center mt-3">
+                    <Button type="submit" className="bg-sec hover:bg-pri hover:text-black font-bold">I'm Satisfied</Button>
+                </div>
             </form>
         </Form>
     )

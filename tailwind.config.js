@@ -21,34 +21,29 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        light: {
+          DEFAULT: "#FFF7D4",
+          foreground: "#FFF7D4",
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        pri: {
+          DEFAULT: "#FFD95A",
+          foreground: "#FFD95A",
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        sec: {
+          DEFAULT: "#C07F00",
+          foreground: "#hsl(var(--destructive))",
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+        tri: {
+          DEFAULT: "#4C3D3D",
+          foreground: "#4C3D3D",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+        dark: {
+          DEFAULT: "#001C30",
+          foreground: "#001C30",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+      },
+      fontFamily: {
+        'overpass': ['Overpass', 'sans-serif']
       },
       borderRadius: {
         lg: "var(--radius)",
