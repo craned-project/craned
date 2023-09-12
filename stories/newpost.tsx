@@ -84,19 +84,19 @@ export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center m-7 rounded-lg p-3 w-full bg-pri h-3/5 font-overpass">
                 <FormField
                     control={form.control}
                     name='text'
                     render={({ field }) => (
-                        <FormItem className='flex w-full flex-col gap-3'>
-                            <FormLabel className='text-base-semibold text-light-2'>
-                                Post:
+                        <FormItem>
+                            <FormLabel className='text-2xl font-bold text-tri'>
+                                New Post!
                             </FormLabel>
                             <FormControl>
-                                <Input
-                                    type='text'
-                                    className='account-form_input no-focus'
+                                <Textarea
+                                    className='placeholder:text-gray-500 text-lg h-3/5 resize-none p-2 rounded-lg w-full outline-none'
+                                    rows={10}
                                     {...field}
                                 />
                             </FormControl>
@@ -104,7 +104,9 @@ export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-end mt-3">
+                    <Button type="submit" className="bg-sec text-white text-lg hover:bg-tri">Post!</Button>
+                </div>
             </form>
         </Form>
     )
