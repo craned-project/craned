@@ -90,4 +90,3 @@ export async function getRecommendedPosts(userId: string) {
     // Return the recommended posts
     return posts;
 };
-

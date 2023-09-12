@@ -1,10 +1,7 @@
-"use client";
-
 import Post from "@/lib/models/post.model";
 import Image from "next/image";
 
 export function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
-    console.log(post);
     return (
         <div>
             <div>{post.text}</div>
