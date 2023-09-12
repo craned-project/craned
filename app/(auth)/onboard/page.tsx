@@ -21,7 +21,7 @@ export default async function Page() {
         <div className="flex flex-col justify-center items-center bg-tri p-7 max-w-[60%] rounded-2xl">
             <h1 className="text-3xl text-center text-pri font-overpass font-bold">Let's Get You On Board!</h1>
             <p className="text-lg text-white">Welcome, new member! Let's continue your signing up here!</p>
-            <AccountProfile user={d} title="Title" redirecturl="/" />
+            <AccountProfile user={d} authuser={user} title="Title" redirecturl="/" />
         </div>
     </main>)
 }

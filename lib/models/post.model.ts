@@ -29,7 +29,9 @@ const postSchema = new mongoose.Schema({
   }],
 });
 
-type Post = InferSchemaType<typeof postSchema>;
+interface Post extends InferSchemaType<typeof postSchema> {
+  _id: string;
+}
 const Post: Model<Post> = mongoose.models.Post || mongoose.model("Post", postSchema);
 
 export default Post;

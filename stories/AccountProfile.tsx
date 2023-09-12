@@ -32,16 +32,18 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { UpdateUser } from "@/lib/actions/updateUser.action";
 import { useRouter } from "next/navigation";
+import { User } from "@clerk/nextjs/api";
+import Page from "@/app/(auth)/onboard/page";
 
 function isBase64Image(imageData: string) {
-  const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
-  return base64Regex.test(imageData);
+    const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
+    return base64Regex.test(imageData);
 }
 
-export const AccountProfile = ({ user, title, redirecturl }: Props) => {
-  const { startUpload } = useUploadThing("media");
-  const router = useRouter();
-  const [files, setFiles] = useState<File[]>([]);
+export const AccountProfile = ({ user, title, redirecturl, }: Props) => {
+    const { startUpload } = useUploadThing("media");
+    const router = useRouter();
+    const [files, setFiles] = useState<File[]>([]);
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
@@ -76,100 +78,106 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
     async function onSubmit(values: z.infer<typeof UserValidation>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-            const blob = values.profile_photo;
+        const blob = values.profile_photo;
 
-    const hasImageChanged = isBase64Image(blob);
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
+        const hasImageChanged = isBase64Image(blob);
+        if (hasImageChanged) {
+            const imgRes = await startUpload(files);
 
-      if (imgRes && imgRes[0].url) {
-        values.profile_photo = imgRes[0].url;
-      }
-    }
+            if (imgRes && imgRes[0].url) {
+                values.profile_photo = imgRes[0].url;
+            }
+        }
         console.log(values)
-        await UpdateUser({name: values.name, username: values.username, bio: values.bio, id: user.id , image: values.profile_photo});
+        try { await UpdateUser({ name: values.name, username: values.username, bio: values.bio, id: user.id, image: values.profile_photo }); }
+        catch (e) {
+            alert("failed to create/update user! please change your username or try again later");
+            router.refresh();
+        }
+
+
         router.push(redirecturl);
     }
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="">
-            <div className="flex gap-3">
-                <div className="flex-[2]">
-                <FormField
-                    control={form.control}
-                    name="profile_photo"
-                    render={({ field }) => (
-                        <FormItem className='flex items-center gap-4'>
-                            <FormLabel>
-                                {field.value ? (
-                                    <Image
-                                        src={field.value}
-                                        alt='profile_icon'
-                                        width={70}
-                                        height={70}
-                                        priority
-                                        className='rounded-full object-contain'
-                                    />
-                                ) : (
-                                    <Image
-                                        src='/uwoog.png'
-                                        alt='profile_icon'
-                                        width={70}
-                                        height={70}
-                                        className='object-contain'
-                                    />
-                                )}
-                            </FormLabel>
-                            <FormControl className='flex-1 text-base-semibold text-gray-200'>
-                                <Input
-                                    type='file'
-                                    accept='image/*'
-                                    placeholder='Add profile photo'
-                                    className='account-form_image-input'
-                                    onChange={(e) => handleImage(e, field.onChange)}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-                
-                    <FormField
-                        control={form.control}
-                        name='name'
-                        render={({ field }) => (
-                            <FormItem className='flex w-full flex-col mt-2 outline-0'>
-                                <FormControl>
-                                    <Input
-                                        type='text'
-                                        className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
-                                        placeholder='Name'
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name='username'
-                        render={({ field }) => (
-                            <FormItem className='flex items-center gap-2 w-full mt-0 outline-0'>
-                                <FormLabel className='text-semibold text-xl text-gray-500'>
-                                    @
-                                </FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type='text'
-                                        className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
-                                        placeholder="Username"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                <div className="flex gap-3">
+                    <div className="flex-[2]">
+                        <FormField
+                            control={form.control}
+                            name="profile_photo"
+                            render={({ field }) => (
+                                <FormItem className='flex items-center gap-4'>
+                                    <FormLabel>
+                                        {field.value ? (
+                                            <Image
+                                                src={field.value}
+                                                alt='profile_icon'
+                                                width={70}
+                                                height={70}
+                                                priority
+                                                className='rounded-full object-contain'
+                                            />
+                                        ) : (
+                                            <Image
+                                                src='/uwoog.png'
+                                                alt='profile_icon'
+                                                width={70}
+                                                height={70}
+                                                className='object-contain'
+                                            />
+                                        )}
+                                    </FormLabel>
+                                    <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                                        <Input
+                                            type='file'
+                                            accept='image/*'
+                                            placeholder='Add profile photo'
+                                            className='account-form_image-input'
+                                            onChange={(e) => handleImage(e, field.onChange)}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name='name'
+                            render={({ field }) => (
+                                <FormItem className='flex w-full flex-col mt-2 outline-0'>
+                                    <FormControl>
+                                        <Input
+                                            type='text'
+                                            className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
+                                            placeholder='Name'
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='username'
+                            render={({ field }) => (
+                                <FormItem className='flex items-center gap-2 w-full mt-0 outline-0'>
+                                    <FormLabel className='text-semibold text-xl text-gray-500'>
+                                        @
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type='text'
+                                            className='account-form_input no-focus border-none outline-none placeholder:text-gray-500 placeholder:text-lg placeholder:font-overpass font-overpass text-lg'
+                                            placeholder="Username"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                     <div className="flex-[2]">
                         <FormField

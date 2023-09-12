@@ -1,5 +1,6 @@
 import mongoose, { Model } from "mongoose";
 import { InferSchemaType } from "mongoose";
+import Post from "./post.model";
 
 const userSchema = new mongoose.Schema({
   id: {
@@ -15,7 +16,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image: String,
+  image: {type: String,
+      required: true,
+  },
   bio: String,
   onboarded: {
     type: Boolean,
@@ -26,7 +29,6 @@ const userSchema = new mongoose.Schema({
     ref: "Post",
   }],
 });
-
 type User = InferSchemaType<typeof userSchema>;
 const User: Model<User> = mongoose.models.User || mongoose.model("User", userSchema);
 

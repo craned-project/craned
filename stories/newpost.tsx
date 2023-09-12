@@ -1,7 +1,5 @@
 "use client";
-interface Props {
-    userid: string;
-}
+
 import {
     Form,
     FormControl,
@@ -31,7 +29,7 @@ function isBase64Image(imageData: string) {
     return base64Regex.test(imageData);
 }
 
-export const NewPost = ({ userid }: Props) => {
+export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?: string}) => {
     const { startUpload } = useUploadThing("media");
     const router = useRouter();
     const [files, setFiles] = useState<File[]>([]);
@@ -69,6 +67,9 @@ export const NewPost = ({ userid }: Props) => {
         // ✅ This will be type-safe and validated.
         console.log(values)
         try {
+            if (parentpostid) {
+                await createNewPost({post: {text: values.text, images: null}, id: userid, parent: parentpostid})
+            }
             await createNewPost({ post: { text: values.text, images: null }, id: userid });
             alert("Created new post");
             router.push("/");
@@ -77,7 +78,7 @@ export const NewPost = ({ userid }: Props) => {
             if (e == "No School") {
                 alert("You can't create new post! You currently have no school! also sus you probably can't reach this page?? contact iloveheapsort@gmail.com if you managed to do it :)");
             }
-            alert("Failed to create new post");
+            alert("Failed to create new post: " + e);
             router.refresh();
         }
     }
@@ -90,7 +91,7 @@ export const NewPost = ({ userid }: Props) => {
                     render={({ field }) => (
                         <FormItem className='flex w-full flex-col gap-3'>
                             <FormLabel className='text-base-semibold text-light-2'>
-                                Name
+                                Post:
                             </FormLabel>
                             <FormControl>
                                 <Input
