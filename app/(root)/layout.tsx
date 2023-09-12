@@ -24,7 +24,7 @@ export default async function RootLayout({
     return (<ClerkProvider>
         <div className="flex justify-between bg-sec p-2">
             <div className="flex items-center">
-                <Link href="/"><Image alt="logo" src="./Craned Logo.svg" width={50} height={50}></Image></Link>
+                <Link href="/"><Image alt="logo" src="../Craned Logo.svg" width={50} height={50}></Image></Link>
                 <span className="text-pri text-4xl font-bold font-overpass">Craned</span>
             </div>
             <SignedOut>
