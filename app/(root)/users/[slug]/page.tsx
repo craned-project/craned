@@ -1,7 +1,6 @@
 import { FetchPostOfUser, FetchUserWithTheirHeadsOff} from "@/lib/actions/updateUser.action"
 import Post from "@/lib/models/post.model";
 import User from "@/lib/models/user.model";
-import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetThisLong";
 import Test3 from "@/stories/Post3Wow";
 import Image from "next/image";
 export default async function users({ params }: { params: { slug: string } }) {
@@ -19,7 +18,7 @@ export default async function users({ params }: { params: { slug: string } }) {
         {userInfo.name}
         {userInfo.bio ? userInfo.bio : null}
         <Image src={userInfo.image} alt="Profile picture" width={100} height={100}/>
-        {posts.map(post => (<><Test3 post={post} /></>))}
+        {posts.map(post => (<Test3 post={post} havelinkascomment={false} />))}
     </>)
     }
     else {
