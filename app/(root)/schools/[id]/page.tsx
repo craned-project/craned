@@ -3,6 +3,7 @@ import School from "@/lib/models/school.model";
 import User from "@/lib/models/user.model";
 import { redirect } from "next/navigation";
 import Post from "@/lib/models/post.model";
+import Test3 from "@/stories/Post3Wow";
 export default async function page({ params }: { params: { id: string } }) {
     const user = await currentUser();
     if (!user) return null;
@@ -40,7 +41,7 @@ export default async function page({ params }: { params: { id: string } }) {
         )}
         <h2>Students count: {school.members.length}</h2>
         {allPosts.map(post => {
-            return <div>{post.text}</div>
+            return <div><Test3 post={post} havelinkascomment={true}/></div>
         })}
 
     </>

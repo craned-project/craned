@@ -1,8 +1,6 @@
 import { getComment, getPost } from "@/lib/actions/newPost.action"
 import { currentUser } from "@clerk/nextjs";
-import { NewPost } from "@/stories/newpost";
 import Post from "@/lib/models/post.model";
-import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetThisLong";
 import Test3 from "@/stories/Post3Wow";
 
 export default async function test2({ params }: { params: { id: string } }) {
@@ -14,6 +12,7 @@ export default async function test2({ params }: { params: { id: string } }) {
     }
     try {
         post = await getPost(params.id)
+        console.log(`I requested ${params.id} and get ${post._id}`);
         comment = await getComment(params.id)
     }
     catch {
@@ -22,7 +21,7 @@ export default async function test2({ params }: { params: { id: string } }) {
     if (post === null) {
         return <></>
     }
-    return <>
-        <Test3 post={post} />
-    </>
+    return <div>
+        <Test3 post={post} havelinkascomment={false} />
+    </div>
 }

@@ -1,5 +1,4 @@
 "use server"
-import { Model } from "mongoose";
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
@@ -21,7 +20,7 @@ export const createNewPost = async ({ post, id: userid, parent }: { post: postPr
         }
         if (parent) {
             const isExist = await Post.exists({ id: parent });
-            if (isExist === null) { 
+            if (isExist === null) {
                 throw new Error(`How did we get there ${userid}?`)
             }
             await Post.create({
@@ -80,13 +79,13 @@ export async function countPostLikes(postId: string): Promise<number> {
 }
 
 export async function getPost(postId: string): Promise<Post> {
-    const post: Post | null = await Post.findOne({ id: postId });
+    const post: Post | null = await Post.findOne({ _id: postId });
     if (post) return post;
     throw new Error(`Failed to get post: ${postId}`)
 }
 
 export async function getComment(postId: string): Promise<Post[]> {
-    const comment: Post[] | null = await Post.find({parentId: postId});
+    const comment: Post[] | null = await Post.find({parentId: postId}).sort('-createdAt');
     console.log(`Comment: ${comment}`)
     if (comment) return comment;
     throw new Error(`Failed to get comment for post: ${postId}`)
