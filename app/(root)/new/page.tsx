@@ -24,9 +24,6 @@ export default async function Page() {
         redirect("/");
     }
     return (
-        <div className="flex">
-            <h1 className="text-3xl">New post</h1>
-            <NewPost userid={authuser.id} />
-        </div>
+        <NewPost userid={authuser.id} />
     )
 }
