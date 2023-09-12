@@ -47,6 +47,14 @@ export const FetchUserWithTheirHeadsOff = async (username: string) => {
     }
 }
 
+export const FetchPostOfUser = async (username: string) => {
+    try {
+        await connectToDB();
+        return await Post.find({author: await User.findOne({username: username})});
+    } catch (e) {
+        throw new Error(`Failed to find user: ${username}: ${e}`);
+    }
+}
 
 export const CheckUser = async (userid: string) => {
     try {
