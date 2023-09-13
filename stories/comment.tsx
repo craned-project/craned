@@ -102,7 +102,7 @@ export const NewComment = ({ userid, parentpostid, className }: { userid: string
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex flex-col gap-1 justify-center items-start m-7 rounded-lg p-3 bg-pri h-min", className)}>
                 <FormLabel className='text-xl font-bold text-tri block'>
-                    New Post!
+                    Comment
                 </FormLabel>
                 <FormField
                     control={form.control}
