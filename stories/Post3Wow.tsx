@@ -7,8 +7,9 @@ import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import { useUploadThing } from "@/lib/upload";
 import { NewComment } from "./comment";
+import User from "@/lib/models/user.model";
 
-export default async function Test3({ post, havelinkascomment }: { post: Post, havelinkascomment: boolean }) {
+export default async function Test3({ post }: { post: Post }) {
     let comment: Post[];
 
     console.log(post)
@@ -28,7 +29,14 @@ export default async function Test3({ post, havelinkascomment }: { post: Post, h
     if (post === null) {
         return <div></div>
     }
+    const author: User | null = await User.findOne(post.author);
+    console.log(author);
+    if (author === null) {
+        return <></> // I'm coping
+    }
     return <div className="bg-sec p-2 rounded-xl">
+        {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
+        <Link href={`/users/${author.username}`}>{author.name} (@{author.username})</Link>
         <PoooooooseOrPostWhateverDonTMatter post={post} />
         <Link href={`/posts/${post._id}`}>(go to post)</Link>
         <div>
@@ -36,7 +44,7 @@ export default async function Test3({ post, havelinkascomment }: { post: Post, h
             <NewComment userid={authuser.id} parentpostid={id} />
             <div>{comment.length > 0 ? (comment.map((c) => {
                 return (
-                    <div><Test3 post={c} havelinkascomment={true} key={post._id} /></div>
+                    <div><Test3 post={c} key={post._id} /></div>
                 )
             })) : <div>So Empty </div>}</div>
         </div>
