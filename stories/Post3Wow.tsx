@@ -28,7 +28,7 @@ export default async function Test3({ post, havelinkascomment }: { post: Post, h
     if (post === null) {
         return <div></div>
     }
-    return <div className="">
+    return <div className="bg-sec p-2 rounded-xl">
         <PoooooooseOrPostWhateverDonTMatter post={post} />
         <Link href={`/posts/${post._id}`}>(go to post)</Link>
         <div>
