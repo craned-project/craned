@@ -6,6 +6,7 @@ import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetT
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import { useUploadThing } from "@/lib/upload";
+import { NewComment } from "./comment";
 
 export default async function Test3({ post, havelinkascomment }: { post: Post, havelinkascomment: boolean }) {
     let comment: Post[];
@@ -27,17 +28,17 @@ export default async function Test3({ post, havelinkascomment }: { post: Post, h
     if (post === null) {
         return <div></div>
     }
-    return <div className="pl-10">
+    return <div className="">
         <PoooooooseOrPostWhateverDonTMatter post={post} />
         <Link href={`/posts/${post._id}`}>(go to post)</Link>
         <div>
             <div>Comment:</div>
-            <NewPost userid={authuser.id} parentpostid={id} />
+            <NewComment userid={authuser.id} parentpostid={id} />
             <div>{comment.length > 0 ? (comment.map((c) => {
                 return (
                     <div><Test3 post={c} havelinkascomment={true} key={post._id} /></div>
                 )
-            })) : <div>"No comment"</div>}</div>
+            })) : <div>So Empty </div>}</div>
         </div>
     </div>
 }

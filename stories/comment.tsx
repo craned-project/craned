@@ -30,7 +30,7 @@ function isBase64Image(imageData: string) {
     return base64Regex.test(imageData);
 }
 
-export const NewPost = ({ userid, parentpostid, className }: { userid: string, parentpostid?: string, className?: string }) => {
+export const NewComment = ({ userid, parentpostid, className }: { userid: string, parentpostid?: string, className?: string }) => {
     const { startUpload } = useUploadThing("media");
     const router = useRouter();
     const [files, setFiles] = useState<File[]>([]);
@@ -100,8 +100,8 @@ export const NewPost = ({ userid, parentpostid, className }: { userid: string, p
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex flex-col gap-1 justify-center items-center flex-3 m-7 rounded-lg p-3 w-full bg-pri h-min", className)}>
-                <FormLabel className='text-4xl font-bold text-tri block w-full'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className={cn("flex flex-col gap-1 justify-center items-start m-7 rounded-lg p-3 bg-pri h-min", className)}>
+                <FormLabel className='text-xl font-bold text-tri block'>
                     New Post!
                 </FormLabel>
                 <FormField
@@ -113,7 +113,7 @@ export const NewPost = ({ userid, parentpostid, className }: { userid: string, p
                                 <Textarea
                                     className='placeholder:text-gray-500 w-[500px] text-lg resize-none p-2 rounded-lg outline-none'
                                     placeholder="Message"
-                                    rows={5}
+                                    rows={2}
                                     {...field}
                                 />
                             </FormControl>
@@ -129,11 +129,12 @@ export const NewPost = ({ userid, parentpostid, className }: { userid: string, p
                             <FormItem className="">
                                 {field.value ? (
                                     <div className="mt-4">
-                                        <FormLabel className="absolute z-[3] top-[38%] right-[32%]">
-                                            <div className="rounded-full bg-tri p-2 flex justify-center items-center h-[70px] w-[70px]">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="fill-white h-[50px] w-[50px]">
+                                        <FormLabel className="">
+                                            <div className="rounded-full bg-tri p-2 flex justify-center items-center gap-1 w-fit mb-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="fill-white h-[20px] w-[20px]">
                                                     <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/>
                                                 </svg>
+                                                <div className="text-white text-sm">Photo</div>
                                             </div>
                                         </FormLabel>
                                         <Image
@@ -142,16 +143,17 @@ export const NewPost = ({ userid, parentpostid, className }: { userid: string, p
                                         width={400}
                                         height={400}
                                         priority
-                                        className='rounded-xl object-cover w-[400px] h-[400px] z-[1] block relative bg-tri'
+                                        className='rounded-xl object-cover w-[200px] h-[200px] block bg-tri'
                                         />
                                     </div>
                                     
                                 ) : (
-                                    <FormLabel className="absolute z-[3] top-[58%] right-[30%]">
-                                        <div className="rounded-full bg-tri p-2 flex justify-center items-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="fill-white h-[40px] w-[40px]">
+                                    <FormLabel className="">
+                                        <div className="rounded-full bg-tri p-2 flex justify-center items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="fill-white h-[20px] w-[20px]">
                                                 <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/>
                                             </svg>
+                                            <div className="text-white text-sm">Photo</div>
                                         </div>
                                     </FormLabel>
                                     
@@ -170,7 +172,7 @@ export const NewPost = ({ userid, parentpostid, className }: { userid: string, p
                     )}
                 />
                 
-                <div className="flex justify-end mt-3">
+                <div className="flex justify-end mt-3 w-full">
                     <Button type="submit" className="bg-sec text-white text-lg hover:bg-tri">Post!</Button>
                 </div>
             </form>

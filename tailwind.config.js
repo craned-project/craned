@@ -42,9 +42,6 @@ module.exports = {
           foreground: "#001C30",
         },
       },
-      fontFamily: {
-        'overpass': ['Overpass', 'sans-serif']
-      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

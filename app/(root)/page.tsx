@@ -25,7 +25,6 @@ export default async function Home({
     return (
         <div className="flex flex-col">
             { /* <Sidebar /> */}
-            <h1 className="text-3xl">Home</h1>
             {posts.map(post => (
                 <Test3 post={post} havelinkascomment={true} />
             ))}
