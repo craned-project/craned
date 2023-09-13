@@ -32,7 +32,7 @@ export default async function Home({
                 <div className="flex flex-col gap-2">
                     { /* <Sidebar /> */}
                     {posts.map(post => (
-                        <Test3 post={post} havelinkascomment={true} />
+                        <Test3 post={post} />
                     ))}
                     {pages >1 ? <Link href={`/?page=${pages - 1}`}>Go back</Link> : <>Can't go back</>}
                     {isNext ? <Link href={`/?page=${pages + 1}`}>Go next</Link> : <>You just went through every post (;° ロ°)</>}
