@@ -14,12 +14,14 @@ export default function LikeButton({
     userid: string;
     postid: string;
 }) {
+    console.log(isliking);
     const [like, setLike] = useState<number>(likes);
     const [islike, setislike] = useState<boolean>(isliking);
     const refetchdata = async () => {
         console.log("refreshing data");
         setislike(await getUserLikePostOrNot(userid, postid));
         setLike(await getLikesCount(postid));
+        console.log(islike, like);
     }
     return (<div onClick={async () => {
         if (islike) {await handleUnlike(userid, postid);} else {await handleLike(userid, postid);} await refetchdata();
