@@ -3,6 +3,7 @@ import Post from "@/lib/models/post.model";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import LikeButton from "./likebtn";
+import { Share } from "./share";
 
 export async function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
     const user = await currentUser();
@@ -20,6 +21,8 @@ export async function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
                     />
                 </div>
             </div>
+            <Share url={`${process.env.VERCEL_URL || "localhost:3000"}/posts/${post._id}`} />
+            <LikeButton userid={user.id} postid={post._id} likes={likecount} isliking={await getUserLikePostOrNot(user.id, post._id)}/>
         </div>
     )
 
