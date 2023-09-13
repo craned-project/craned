@@ -29,11 +29,14 @@ export default async function Test3({ post }: { post: Post }) {
     if (post === null) {
         return <div></div>
     }
-    // @ts-ignore
-    const author: User = post.author;
+    const author: User | null = await User.findOne(post.author);
+    console.log(author);
+    if (author === null) {
+        return <></> // I'm coping
+    }
     return <div className="bg-sec p-2 rounded-xl">
-    {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
-    <Link href={`/users/${author.username}`}>{author.name} (@{author.username})</Link>
+        {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
+        <Link href={`/users/${author.username}`}>{author.name} (@{author.username})</Link>
         <PoooooooseOrPostWhateverDonTMatter post={post} />
         <Link href={`/posts/${post._id}`}>(go to post)</Link>
         <div>
