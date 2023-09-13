@@ -31,11 +31,9 @@ function isBase64Image(imageData: string) {
 }
 
 export const NewComment = ({
-  userid,
   parentpostid,
   className,
 }: {
-  userid: string;
   parentpostid?: string;
   className?: string;
 }) => {
@@ -90,18 +88,16 @@ export const NewComment = ({
       if (parentpostid) {
         await createNewPost({
           post: { text: values.text, image: values.images },
-          id: userid,
           parent: parentpostid,
         });
       } else {
         await createNewPost({
           post: { text: values.text, image: values.images },
-          id: userid,
         });
-
-        alert("Created new post");
-        router.push("/");
       }
+
+      alert("Created new comment");
+      form.reset();
     } catch (e) {
       if (e == "No School") {
         alert(

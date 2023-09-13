@@ -1,8 +1,10 @@
 "use server";
+import { auth } from "@clerk/nextjs/server";
 import Post from "../models/post.model";
 import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import { CheckUser } from "./updateUser.action";
+import { revalidatePath } from "next/cache";
 
 interface postProps {
   text: string;
@@ -11,16 +13,17 @@ interface postProps {
 
 export const createNewPost = async ({
   post,
-  id: userid,
   parent,
 }: {
   post: postProps;
-  id: string;
   parent?: string;
 }) => {
   try {
     await connectToDB();
-
+    const {userId: userid }= auth()
+    if (userid === null) {
+      throw new Error("No log in?");
+    }
     const author = await User.findOne({ id: userid });
     if (!CheckUser(userid)) {
       console.log(`Author of post doesn't have school yet: ${userid}`);
@@ -44,11 +47,12 @@ export const createNewPost = async ({
         author: author,
       });
     }
+    revalidatePath("/");
   } catch (e) {
     if (e == "1") {
       return "No School";
     }
-    throw new Error(`Failed to create post: ${userid}: ${e}`);
+    throw new Error(`Failed to create post: ${e}`);
   }
 };
 
