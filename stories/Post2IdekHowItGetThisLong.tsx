@@ -13,6 +13,14 @@ export async function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
         <div>
             <div className="text-white text-lg">{post.text}</div>
             <div className="flex justify-center items-center">{post.image ? (<Image src={post.image} width={400} height={400} alt="Image" className="bg-pri object-cover rounded-2xl w-[400px] h-[400px]"/>) : <div></div>}</div>
+            <div className="flex justify-center mt-1">
+                <div className="flex items-center justify-around bg-pri p-1 rounded-lg">
+                    <LikeButton 
+                        userid={user.id} postid={post._id} likes={likecount} 
+                        isliking={await getUserLikePostOrNot(user.id, post._id)}
+                    />
+                </div>
+            </div>
             <Share url={`${process.env.VERCEL_URL || "localhost:3000"}/posts/${post._id}`} />
             <LikeButton userid={user.id} postid={post._id} likes={likecount} isliking={await getUserLikePostOrNot(user.id, post._id)}/>
         </div>
