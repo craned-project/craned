@@ -8,5 +8,5 @@ export const UserValidation = z.object({
 })
 export const PostValidation = z.object({
     text: z.string(),
-    images: z.array(z.string().url()).or(z.null()),
+    images: z.string().url().or(z.null()),
 });

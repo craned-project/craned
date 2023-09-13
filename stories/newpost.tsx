@@ -29,7 +29,7 @@ function isBase64Image(imageData: string) {
     return base64Regex.test(imageData);
 }
 
-export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?: string}) => {
+export const NewPost = ({ userid, parentpostid }: { userid: string, parentpostid?: string }) => {
     const { startUpload } = useUploadThing("media");
     const router = useRouter();
     const [files, setFiles] = useState<File[]>([]);
@@ -66,15 +66,30 @@ export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+        const blob = values.images;
+        if (blob !== null) {
+
+        const hasImageChanged = isBase64Image(blob);
+        if (hasImageChanged) {
+            const imgRes = await startUpload(files);
+
+            if (imgRes && imgRes[0].url) {
+                values.images= imgRes[0].url;
+            }
+        }
+        }
         try {
             if (parentpostid) {
-                await createNewPost({post: {text: values.text, images: null}, id: userid, parent: parentpostid})
+                await createNewPost({ post: { text: values.text, image: values.images}, id: userid, parent: parentpostid })
             }
-            await createNewPost({ post: { text: values.text, images: null }, id: userid });
-            alert("Created new post");
-            router.push("/");
+            else {
+                await createNewPost({ post: { text: values.text, image: values.images}, id: userid });
+
+                alert("Created new post");
+                router.push("/");
+            }
         }
-        catch (e){
+        catch (e) {
             if (e == "No School") {
                 alert("You can't create new post! You currently have no school! also sus you probably can't reach this page?? contact iloveheapsort@gmail.com if you managed to do it :)");
             }
@@ -84,7 +99,7 @@ export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?
     }
     return (
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center m-7 rounded-lg p-3 w-full bg-pri h-3/5 font-overpass">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center m-7 rounded-lg p-3 w-full bg-pri h-3/5 font-overpass">
                 <FormField
                     control={form.control}
                     name='text'
@@ -102,6 +117,35 @@ export const NewPost = ({ userid, parentpostid }: {userid: string, parentpostid?
                             </FormControl>
                             <FormMessage />
                         </FormItem>
+                    )}
+                />
+                <FormField
+                    name='images'
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormControl>
+                            <FormItem>
+                                {field.value && (
+                                    <Image
+                                        src={field.value}
+                                        alt='profile_icon'
+                                        width={70}
+                                        height={70}
+                                        priority
+                                        className='rounded-full object-contain'
+                                    />
+                                )}
+                                <FormControl className='flex-1 text-base-semibold text-gray-200'>
+                                    <Input
+                                        type='file'
+                                        accept='image/*'
+                                        placeholder='Add profile photo'
+                                        className='account-form_image-input'
+                                        onChange={(e) => handleImage(e, field.onChange)}
+                                    />
+                                </FormControl>
+                            </FormItem>
+                        </FormControl>
                     )}
                 />
                 <div className="flex justify-end mt-3">

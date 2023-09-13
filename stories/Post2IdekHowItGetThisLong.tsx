@@ -5,9 +5,7 @@ export function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
     return (
         <div>
             <div>{post.text}</div>
-            <div>{post.images ? post.images.map(p => (
-                <Image src={p} width={100} height={100} alt="Image" />
-            )) : <div></div>}</div>
+            <div>{post.image ? (<Image src={post.image} width={500} height={500} alt="Image"/>) : <div></div>}</div>
             <div>Heart button {"<3"}</div>
         </div>
     )
