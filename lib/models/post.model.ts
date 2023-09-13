@@ -1,4 +1,3 @@
-
 import mongoose, { Model } from "mongoose";
 import { InferSchemaType } from "mongoose";
 
@@ -23,14 +22,17 @@ const postSchema = new mongoose.Schema({
   image: {
     type: String,
   },
-  children: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Post",
-  }],
+  children: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
 });
 interface Post extends InferSchemaType<typeof postSchema> {
   _id: string;
 }
-const Post: Model<Post> = mongoose.models.Post || mongoose.model("Post", postSchema);
+const Post: Model<Post> =
+  mongoose.models.Post || mongoose.model("Post", postSchema);
 
 export default Post;
