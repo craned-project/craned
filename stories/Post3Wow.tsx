@@ -4,9 +4,12 @@ import { NewPost } from "@/stories/newpost";
 import Post from "@/lib/models/post.model";
 import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetThisLong";
 import Link from "next/link";
+import { ChangeEvent, useState } from "react";
+import { useUploadThing } from "@/lib/upload";
 
 export default async function Test3({ post, havelinkascomment }: { post: Post, havelinkascomment: boolean }) {
     let comment: Post[];
+
     console.log(post)
     const authuser = await currentUser();
     if (authuser === null) {
@@ -20,6 +23,7 @@ export default async function Test3({ post, havelinkascomment }: { post: Post, h
     catch {
         return <>Post doesn't exist</>
     }
+
     if (post === null) {
         return <div></div>
     }

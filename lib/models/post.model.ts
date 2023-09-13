@@ -20,15 +20,14 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post",
   },
-  images: [{
+  image: {
     type: String,
-  }],
+  },
   children: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post",
   }],
 });
-
 interface Post extends InferSchemaType<typeof postSchema> {
   _id: string;
 }

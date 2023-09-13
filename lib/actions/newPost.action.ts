@@ -6,7 +6,7 @@ import { CheckUser } from "./updateUser.action";
 
 interface postProps {
     text: string,
-    images: string[] | null,
+    image: string | null,
 }
 
 export const createNewPost = async ({ post, id: userid, parent }: { post: postProps, id: string, parent?: string }) => {
@@ -25,6 +25,7 @@ export const createNewPost = async ({ post, id: userid, parent }: { post: postPr
             }
             await Post.create({
                 text: post.text,
+                image: post.image,
                 author: author,
                 parentId: parent
             });
@@ -32,6 +33,7 @@ export const createNewPost = async ({ post, id: userid, parent }: { post: postPr
         else {
             await Post.create({
                 text: post.text,
+                image: post.image,
                 author: author,
             });
         }
