@@ -1,4 +1,4 @@
-import { getLikesCount, getUserLikePostOrNot, likePost } from "@/lib/actions/updateUser.action";
+import { getLikesCount, getUserLikePostOrNot } from "@/lib/actions/updateUser.action";
 import Post from "@/lib/models/post.model";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
