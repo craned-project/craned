@@ -22,31 +22,33 @@ export default async function RootLayout({
     const userInfo = await FetchUser(user.id);
     if (!userInfo?.onboarded) redirect("/onboard");
     return (<ClerkProvider>
-        <div className="flex justify-between bg-sec p-2">
-            <div className="flex items-center">
-                <Link href="/"><Image alt="logo" src="../Craned Logo.svg" width={50} height={50}></Image></Link>
-                <span className="text-pri text-4xl font-bold font-overpass">Craned</span>
-            </div>
-            <SignedOut>
-                <SignInButton>
-                    Sign In
-                </SignInButton>
-            </SignedOut>
-            <SignedIn>
-                <div className="flex gap-2 mr-3 items-center">
-                    <div className="flex flex-col items-bottom gap-0">
-                        <span className="text-right text-white font-overpass text-lg">{userInfo.name}</span>
-                        <span className="text-right text-gray-200 font-overpass text-sm">(@{userInfo.username})</span>
-                    </div>
-                    <Image className="rounded-full" alt="Profile Picture" width={50} height={50} src={userInfo.image}/>
-                    <SignOutButton>
-                        <span className="flex justify-center items-center rounded-xl p-1 bg-tri hover:bg-pri text-white hover:text-tri font-overpass transition-[250ms] h-[35px]">Sign out</span>
-                    </SignOutButton>
+        <div className="sticky top-0">
+            <div className="flex justify-between bg-sec p-2">
+                <div className="flex items-center">
+                    <Link href="/"><Image alt="logo" src="../Craned Logo.svg" width={50} height={50}></Image></Link>
+                    <span className="text-pri text-4xl font-bold font-overpass">Craned</span>
                 </div>
-            </SignedIn>
+                <SignedOut>
+                    <SignInButton>
+                        Sign In
+                    </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                    <div className="flex gap-2 mr-3 items-center">
+                        <div className="flex flex-col items-bottom gap-0">
+                            <span className="text-right text-white font-overpass text-lg">{userInfo.name}</span>
+                            <span className="text-right text-gray-200 font-overpass text-sm">(@{userInfo.username})</span>
+                        </div>
+                        <Image className="rounded-full" alt="Profile Picture" width={50} height={50} src={userInfo.image}/>
+                        <SignOutButton>
+                            <span className="flex justify-center items-center rounded-xl p-1 bg-tri hover:bg-pri text-white hover:text-tri font-overpass transition-[250ms] h-[35px]">Sign out</span>
+                        </SignOutButton>
+                    </div>
+                </SignedIn>
+            </div>
         </div>
         <div className="flex">
-            <div className="w-1/10 bg-sec h-[calc(100vh-66px)]">
+            <div className="w-1/10 bg-sec h-[calc(100vh-66px)] sticky top-[66px]">
                 <nav className="flex flex-col gap-1 p-2 mt-5">
                     <ActiveLink href="/">
                         <div className="flex flex-col justify-center items-center">

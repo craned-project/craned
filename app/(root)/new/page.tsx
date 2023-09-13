@@ -24,6 +24,10 @@ export default async function Page() {
         redirect("/");
     }
     return (
-        <NewPost userid={authuser.id} />
+        <div className="flex w-full items-center h-[calc(100vh-66px)]">
+            <div className="flex-[2]"></div>
+            <NewPost userid={authuser.id} className="flex-[3]"/>
+            <div className="flex-[2]"></div>
+        </div>
     )
 }
