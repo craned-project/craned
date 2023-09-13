@@ -1,8 +1,7 @@
 import { SignInButton, currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import {
-  FetchUser,
-  getRecommendedPosts,
+  FetchUser
 } from "@/lib/actions/updateUser.action";
 import { fetchPosts } from "@/lib/actions/newPost.action";
 import Test3 from "@/stories/Post3Wow";
