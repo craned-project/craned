@@ -18,13 +18,16 @@ const schoolSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  members: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }],
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 type School = InferSchemaType<typeof schoolSchema>;
-const School: Model<School> = mongoose.models.School || mongoose.model("School", schoolSchema);
+const School: Model<School> =
+  mongoose.models.School || mongoose.model("School", schoolSchema);
 
 export default School;

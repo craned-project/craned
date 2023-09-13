@@ -14,5 +14,5 @@ export default function RootLayout({
       <div className="flex-[3]">{children}</div>
       <div className="flex-[2]"></div>
     </div>
-  )
+  );
 }
