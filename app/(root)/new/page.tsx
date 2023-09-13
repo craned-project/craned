@@ -15,15 +15,13 @@ import User from "@/lib/models/user.model";
     }
  * */
 export default async function Page() {
-    const authuser = await currentUser();
-    if (!authuser) return null;
-    const userInfo = await FetchUser(authuser.id);
-    const check = await CheckUser(authuser.id);
-    // School.create({slug: "pkw", name: "Pkw", admin: await User.findOne({id: authuser.id}), members: [await User.findOne({id: authuser.id})]});
-    if (!check) {
-        redirect("/");
-    }
-    return (
-        <NewPost userid={authuser.id} />
-    )
+  const authuser = await currentUser();
+  if (!authuser) return null;
+  const userInfo = await FetchUser(authuser.id);
+  const check = await CheckUser(authuser.id);
+  // School.create({slug: "pkw", name: "Pkw", admin: await User.findOne({id: authuser.id}), members: [await User.findOne({id: authuser.id})]});
+  if (!check) {
+    redirect("/");
+  }
+  return <NewPost userid={authuser.id} />;
 }
