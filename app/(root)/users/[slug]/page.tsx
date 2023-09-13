@@ -27,7 +27,7 @@ export default async function users({ params }: { params: { slug: string } }) {
           height={100}
         />
         {posts.map((post) => (
-          <Test3 post={post} havelinkascomment={false} />
+          <Test3 post={post} />
         ))}
       </>
     );

@@ -45,7 +45,7 @@ export default async function page({ params }: { params: { id: string } }) {
       {allPosts.map((post) => {
         return (
           <div>
-            <Test3 post={post} havelinkascomment={true} />
+            <Test3 post={post} />
           </div>
         );
       })}

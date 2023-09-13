@@ -10,13 +10,11 @@ import { useState, useEffect } from "react";
 
 export default function LikeButton({
   likes,
-  userid,
   postid,
   isliking,
 }: {
   likes: number;
   isliking: boolean;
-  userid: string;
   postid: string;
 }) {
   console.log(isliking);
@@ -24,7 +22,7 @@ export default function LikeButton({
   const [islike, setislike] = useState<boolean>(isliking);
   const refetchdata = async () => {
     console.log("refreshing data");
-    setislike(await getUserLikePostOrNot(userid, postid));
+    setislike(await getUserLikePostOrNot(postid));
     setLike(await getLikesCount(postid));
     console.log(islike, like);
   };
@@ -32,9 +30,9 @@ export default function LikeButton({
     <div
       onClick={async () => {
         if (islike) {
-          await handleUnlike(userid, postid);
+          await handleUnlike(postid);
         } else {
-          await handleLike(userid, postid);
+          await handleLike(postid);
         }
         await refetchdata();
       }}

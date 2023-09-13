@@ -28,12 +28,6 @@ const userSchema = new mongoose.Schema({
       ref: "Post",
     },
   ],
-  followedUser: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "School",
-    },
-  ],
 });
 type User = InferSchemaType<typeof userSchema>;
 const User: Model<User> =
