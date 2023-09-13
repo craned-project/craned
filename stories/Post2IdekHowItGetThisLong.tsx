@@ -10,10 +10,10 @@ export async function PoooooooseOrPostWhateverDonTMatter({post}: {post: Post}) {
     if (!user) return <></>;
     return (
         <div>
-            <div>{post.text}</div>
-            <div>{post.image ? (<Image src={post.image} width={500} height={500} alt="Image"/>) : <div></div>}</div>
+            <div className="text-white text-lg">{post.text}</div>
+            <div className="flex justify-center items-center">{post.image ? (<Image src={post.image} width={400} height={400} alt="Image" className="bg-pri object-cover rounded-2xl w-[400px] h-[400px]"/>) : <div></div>}</div>
             <LikeButton userid={user.id} postid={post._id} likes={likecount} isliking={await getUserLikePostOrNot(user.id, post._id)}/>
-                    </div>
+        </div>
     )
 
 }
