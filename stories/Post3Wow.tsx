@@ -8,7 +8,7 @@ import { pinning } from "@/lib/actions/updateUser.action";
 import { PinPost } from "./pinpost";
 import Image from "next/image"
 
-export default async function Test3({ post }: { post: Post }) {
+export default async function Test3({ post, className }: { post: Post, className?: string }) {
   let comment: Post[];
 
   console.log(post);
@@ -29,7 +29,7 @@ export default async function Test3({ post }: { post: Post }) {
     return <></>; // I'm coping
   }
   return (
-    <div className="bg-sec p-3 rounded-xl">
+    <div className={'bg-sec p-3 rounded-xl ' + className}>
       {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
       <div className="flex gap-1 items-center">
         <Image
