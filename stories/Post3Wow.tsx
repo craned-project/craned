@@ -58,7 +58,7 @@ export default async function Test3({ post }: { post: Post }) {
               );
             })
           ) : (
-            <div>So Empty </div>
+            <></>
           )}
         </div>
       </div>

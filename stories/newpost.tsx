@@ -170,7 +170,7 @@ export const NewPost = ({
                     />
                   </div>
                 ) : (
-                  <FormLabel className="absolute z-[3] top-[58%] right-[30%]">
+                  <FormLabel className="absolute z-[3] top-[58%] right-[29%]">
                     <div className="rounded-full bg-tri p-2 flex justify-center items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
