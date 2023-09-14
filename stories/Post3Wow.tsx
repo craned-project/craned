@@ -41,7 +41,11 @@ export default async function Test3({ post }: { post: Post }) {
         />
         <Link href={`/users/${author.username}`} className="flex flex-col">
           <div className="text-lg text-white flex gap-1 items-center">{author.name}</div>
-          <div className="text-sm text-gray-400">@{author.username}</div>
+          <div className="text-sm text-gray-400 flex gap-1 items-center">
+            @{author.username}
+            <div className="bg-gray-400 rounded-full h-[.6rem] w-[.6rem]"></div>
+            {post.createdAt.toLocaleDateString('en-US')}
+          </div>
         </Link>
         <PinPost postid={post._id}/>
       </div>
