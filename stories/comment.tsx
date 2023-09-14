@@ -125,7 +125,7 @@ export const NewComment = ({
           name="text"
           render={({ field }) => (
             <FormItem>
-              <FormControl className="w-full">
+              <FormControl className="">
                 <Input
                   type="text"
                   className="placeholder:text-gray-500 text-lg resize-none p-2 rounded-lg outline-none"
