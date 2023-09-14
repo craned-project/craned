@@ -10,7 +10,6 @@ export default async function users({
     const getOutput = await getMillennium(pages, 6);
     if (getOutput !== undefined) {
         const { mem: schoolmembers, isNext } = getOutput;
-        console.log(schoolmembers);
         return (<div>
             <div>Students in your school</div>
             <div>{schoolmembers.map(member => member.name)}</div>
