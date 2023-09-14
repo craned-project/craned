@@ -155,7 +155,7 @@ export const NewComment = ({
                     />
                     <div className="flex justify-between w-full">
                       <FormLabel className="">
-                        <div className="rounded-full bg-tri p-2 flex justify-center items-center gap-1 w-fit mb-1">
+                        <div className="rounded-full bg-tri p-2 flex justify-center items-center gap-1 w-fit mb-1 mt-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 512 512"

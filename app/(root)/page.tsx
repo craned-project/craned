@@ -28,16 +28,18 @@ export default async function Home({
             {posts.map((post) => (
               <Test3 post={post}/>
             ))}
-            {pages > 1 ? (
-              <Link href={`/?page=${pages - 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go back</Link>
-            ) : (
-              <div className="flex justify-center text-lg text-tri">Can't go back</div>
-            )}
-            {isNext ? (
-              <Link href={`/?page=${pages + 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go next</Link>
-            ) : (
-              <div className="flex justify-center text-lg text-tri">You just went through every post (;° ロ°)</div>
-            )}
+            <div className="flex justify-between w-full">
+              {pages > 1 ? (
+                <Link href={`/?page=${pages - 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold rounded-xl p-1">Go back</Link>
+              ) : (
+                <div className="flex justify-center text-lg text-tri"></div>
+              )}
+              {isNext ? (
+                <Link href={`/?page=${pages + 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold rounded-xl p-1">Go next</Link>
+              ) : (
+                <div className="flex justify-center text-lg text-tri"></div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex-[2]"></div>

@@ -32,16 +32,16 @@ export default async function users({
                         </div>
                     </Link>
                 ))}</div>
-                <div>
+                <div className="flex justify-between w-full">
                     {pages > 1 ? (
-                        <Link href={`/users?page=${pages - 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go back</Link>
+                        <Link href={`/users?page=${pages - 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold rounded-xl p-1">Go back</Link>
                     ) : (
-                        <div className="flex justify-center text-lg text-pri">Can't go back</div>
+                        <div className="flex justify-center text-lg text-pri"></div>
                     )}
                     {isNext ? (
-                        <Link href={`/users?page=${pages + 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go next</Link>
+                        <Link href={`/users?page=${pages + 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold rounded-xl p-1">Go next</Link>
                     ) : (
-                        <div className="flex justify-center text-lg text-pri">You just went through every users (;° ロ°)</div>
+                        <div className="flex justify-center text-lg text-pri"></div>
                     )}
                 </div>
             </div>
