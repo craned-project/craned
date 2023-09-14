@@ -200,7 +200,7 @@ export async function pinning(postId: string) {
     if (School.findOne({ admin: userId }) === null) {
         throw new Error();
     } else {
-        await School.findOneAndUpdate({ admin: postauthor }, { $addToSet: { pinnedpost: await Post.findOne({ _id: postId }).orFail() } });
+        await School.findOneAndUpdate({ admin: await User.findOne({id: userId})}, { $addToSet: { pinnedpost: await Post.findOne({ _id: postId }).orFail() } });
     }
 }
 

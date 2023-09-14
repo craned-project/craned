@@ -57,7 +57,7 @@ export async function getSchool(pageNumber = 1, pageSize = 5) {
 export async function getPinnedPost(schoolId: string) {
     const posts: Post | Post[] = await School.findOne({ slug: schoolId }).populate<{ pinnedpost: Post }>("pinnedpost").orFail().then((sch) => { return sch.pinnedpost });
     if (Array.isArray(posts)) {
-        return [posts];
+        return posts;
     }
-    return posts;
+    return [posts];
 }
