@@ -31,10 +31,7 @@ export default async function Test3({ post }: { post: Post }) {
   return (
     <div className="bg-sec p-3 rounded-xl">
       {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
-      <Link href={`/users/${author.username}`}>
-        {author.name} (@{author.username})
-      </Link>
-      <div className="flex gap-1">
+      <div className="flex gap-1 items-center">
         <Image
           src={author.image}
           alt="pfp"
@@ -43,7 +40,7 @@ export default async function Test3({ post }: { post: Post }) {
           className="rounded-full"
         />
         <Link href={`/users/${author.username}`} className="flex flex-col">
-          <div className="text-lg text-white">{author.name}</div>
+          <div className="text-lg text-white flex gap-1 items-center">{author.name}</div>
           <div className="text-sm text-gray-400">@{author.username}</div>
         </Link>
         <PinPost postid={post._id}/>
