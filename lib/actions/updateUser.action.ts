@@ -4,7 +4,7 @@ import User from "../models/user.model";
 import Post from "../models/post.model";
 import School from "../models/school.model";
 import { connectToDB } from "../mongoose";
-import mongoose, { Types } from "mongoose";
+import mongoose, { PopulatedDoc, Types } from "mongoose";
 import { auth } from "@clerk/nextjs/server";
 
 interface userProps {
@@ -191,5 +191,15 @@ export async function handleUnlike(postId: string) {
         });
     } catch (error) {
         console.error("Error while unliking post: ", error);
+    }
+}
+
+export async function pinning(postId: string) {
+    const { userId } = auth();
+    const postauthor: User = await Post.findOne({ _id: postId }).populate<{ author: User }>('author').orFail().then(post => { return post.author });
+    if (School.findOne({ admin: userId }) === null) {
+        throw new Error();
+    } else {
+        await School.findOneAndUpdate({ admin: postauthor }, { $addToSet: { pinnedpost: await Post.findOne({ _id: postId }).orFail() } });
     }
 }

@@ -4,6 +4,8 @@ import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetT
 import Link from "next/link";
 import { NewComment } from "./comment";
 import User from "@/lib/models/user.model";
+import { pinning } from "@/lib/actions/updateUser.action";
+import { PinPost } from "./pinpost";
 
 export default async function Test3({ post }: { post: Post }) {
   let comment: Post[];
@@ -31,6 +33,7 @@ export default async function Test3({ post }: { post: Post }) {
       <Link href={`/users/${author.username}`}>
         {author.name} (@{author.username})
       </Link>
+      <PinPost postid={post._id}/>
       <PoooooooseOrPostWhateverDonTMatter post={post} />
       <Link href={`/posts/${post._id}`}>(go to post)</Link>
       <div>
