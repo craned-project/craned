@@ -19,7 +19,7 @@ export default async function users({
                 <div className="flex flex-col gap-2">{schoolmembers.map(member => (
                     <Link href={`/users/${member.username}`} className="flex gap-1 bg-pri p-2 rounded-xl">
                         <Image
-                        src={member.image}
+                        src={member.image ? (member.image) : ("../Craned Logo.svg")}
                         alt="Profile picture"
                         width={80}
                         height={80}
