@@ -34,6 +34,7 @@ import { UpdateUser } from "@/lib/actions/updateUser.action";
 import { useRouter } from "next/navigation";
 import { User } from "@clerk/nextjs/api";
 import Page from "@/app/(auth)/onboard/page";
+import { revalidatePath } from "next/cache";
 
 function isBase64Image(imageData: string) {
   const base64Regex = /^data:image\/(png|jpe?g|gif|webp);base64,/;
@@ -103,7 +104,7 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
       );
       router.refresh();
     }
-
+    revalidatePath("/")
     router.push(redirecturl);
   }
   return (
