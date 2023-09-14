@@ -17,19 +17,31 @@ export default async function users({ params }: { params: { slug: string } }) {
   }
   if (userInfo) {
     return (
-      <>
-        {userInfo.name}
-        {userInfo.bio ? userInfo.bio : null}
-        <Image
-          src={userInfo.image}
-          alt="Profile picture"
-          width={100}
-          height={100}
-        />
-        {posts.map((post) => (
-          <Test3 post={post} />
-        ))}
-      </>
+      <div className="flex w-full">
+        <div className="flex-[2]"></div>
+        <div className="flex-[5]">
+          <div className="flex gap-1 bg-pri p-2 rounded-xl mb-2 mt-3">
+            <Image
+              src={userInfo.image}
+              alt="Profile picture"
+              width={80}
+              height={80}
+              className="rounded-full"
+            />
+            <div className="flex flex-col">
+              <div className="text-lg">{userInfo.name}</div>
+              <div className="text-sm text-gray-600">@{userInfo.username}</div>
+              <div>{userInfo.bio ? userInfo.bio : null}</div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            {posts.map((post) => (
+              <Test3 post={post} />
+            ))}
+          </div>
+        </div>
+        <div className="flex-[2]"></div>
+      </div>
     );
   } else {
     return <>user doesn't exist</>;

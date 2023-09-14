@@ -29,14 +29,14 @@ export default async function Home({
               <Test3 post={post}/>
             ))}
             {pages > 1 ? (
-              <Link href={`/?page=${pages - 1}`}>Go back</Link>
+              <Link href={`/?page=${pages - 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go back</Link>
             ) : (
-              <>Can't go back</>
+              <div className="flex justify-center text-lg text-tri">Can't go back</div>
             )}
             {isNext ? (
-              <Link href={`/?page=${pages + 1}`}>Go next</Link>
+              <Link href={`/?page=${pages + 1}`} className="bg-sec hover:bg-pri hover:text-black font-bold">Go next</Link>
             ) : (
-              <>You just went through every post (;° ロ°)</>
+              <div className="flex justify-center text-lg text-tri">You just went through every post (;° ロ°)</div>
             )}
           </div>
         </div>

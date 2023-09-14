@@ -14,6 +14,11 @@ export default async function settingspage() {
     };
 
     return <>
-        <AccountProfile user={d} title="Settings" redirecturl="/"/>
+    <div className="flex justify-center items-center w-full">
+        <div className="bg-tri rounded-xl p-3">
+            <h1 className="text-pri text-3xl font-bold">Settings</h1>
+            <AccountProfile user={d} title="Settings" redirecturl="/"/>
+        </div>
+    </div>
     </>
 }
