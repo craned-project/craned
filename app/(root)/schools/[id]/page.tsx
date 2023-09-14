@@ -53,11 +53,12 @@ export default async function page({ params }: { params: { id: string } }) {
             </div>
             <div className="flex flex-col gap-2">
                 Pinned Post:
-                {pinned.map((pin) => { return pin.text })}
+                {pinned.map((pin) => { 
+                    return <Test3 post={pin} className="bg-tri"/>})}
                 {allPosts.map((post) => {
                     return (
                         <div className="flex flex-col gap-2">
-                            <Test3 post={post} />
+                            <Test3 post={post}/>
                         </div>
                     );
                 })}

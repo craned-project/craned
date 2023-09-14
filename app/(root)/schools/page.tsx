@@ -14,7 +14,7 @@ export default async function SchoolMain() {
             <div className="flex flex-col gap-2">
             {schools.map(school => { 
                     return <div>
-                        <Link href={`/users/${school.name}`} className="flex gap-1 bg-pri p-2 rounded-xl"> 
+                        <Link href={`/schools/${school.slug}`} className="flex gap-1 bg-pri p-2 rounded-xl"> 
                         <Image
                         src={school.image ? (school.image) : ("../Craned Logo.svg")}
                         alt="Profile picture"
