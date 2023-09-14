@@ -6,6 +6,7 @@ import { NewComment } from "./comment";
 import User from "@/lib/models/user.model";
 import { pinning } from "@/lib/actions/updateUser.action";
 import { PinPost } from "./pinpost";
+import Image from "next/image"
 
 export default async function Test3({ post }: { post: Post }) {
   let comment: Post[];
@@ -28,22 +29,33 @@ export default async function Test3({ post }: { post: Post }) {
     return <></>; // I'm coping
   }
   return (
-    <div className="bg-sec p-2 rounded-xl">
+    <div className="bg-sec p-3 rounded-xl">
       {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
       <Link href={`/users/${author.username}`}>
         {author.name} (@{author.username})
       </Link>
-      <PinPost postid={post._id}/>
+      <div className="flex gap-1">
+        <Image
+          src={author.image}
+          alt="pfp"
+          width={50}
+          height={50}
+          className="rounded-full"
+        />
+        <Link href={`/users/${author.username}`} className="flex flex-col">
+          <div className="text-lg text-white">{author.name}</div>
+          <div className="text-sm text-gray-400">@{author.username}</div>
+        </Link>
+        <PinPost postid={post._id}/>
+      </div>
       <PoooooooseOrPostWhateverDonTMatter post={post} />
-      <Link href={`/posts/${post._id}`}>(go to post)</Link>
       <div>
-        <div>Comment:</div>
         <NewComment parentpostid={id} />
         <div>
           {comment.length > 0 ? (
             comment.map((c) => {
               return (
-                <div>
+                <div className="pl-4">
                   <Test3 post={c} key={post._id} />
                 </div>
               );
