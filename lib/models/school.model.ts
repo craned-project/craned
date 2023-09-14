@@ -24,8 +24,13 @@ const schoolSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  pinnedpost: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+  ],
 });
-
 type School = InferSchemaType<typeof schoolSchema>;
 const School: Model<School> =
   mongoose.models.School || mongoose.model("School", schoolSchema);

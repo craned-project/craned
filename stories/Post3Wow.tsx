@@ -4,6 +4,8 @@ import { PoooooooseOrPostWhateverDonTMatter } from "@/stories/Post2IdekHowItGetT
 import Link from "next/link";
 import { NewComment } from "./comment";
 import User from "@/lib/models/user.model";
+import { pinning } from "@/lib/actions/updateUser.action";
+import { PinPost } from "./pinpost";
 import Image from "next/image"
 
 export default async function Test3({ post }: { post: Post }) {
@@ -29,6 +31,9 @@ export default async function Test3({ post }: { post: Post }) {
   return (
     <div className="bg-sec p-3 rounded-xl">
       {/* <User> type btw, you just get the pfp from auther.profile_picture or smth*/}
+      <Link href={`/users/${author.username}`}>
+        {author.name} (@{author.username})
+      </Link>
       <div className="flex gap-1">
         <Image
           src={author.image}
@@ -41,6 +46,7 @@ export default async function Test3({ post }: { post: Post }) {
           <div className="text-lg text-white">{author.name}</div>
           <div className="text-sm text-gray-400">@{author.username}</div>
         </Link>
+        <PinPost postid={post._id}/>
       </div>
       <PoooooooseOrPostWhateverDonTMatter post={post} />
       <div>
