@@ -203,3 +203,20 @@ export async function pinning(postId: string) {
         await School.findOneAndUpdate({ admin: postauthor }, { $addToSet: { pinnedpost: await Post.findOne({ _id: postId }).orFail() } });
     }
 }
+
+export async function checkadmin(postId: string) {
+  const { userId } = auth();
+
+  const postauthor: User = await Post.findOne({ _id: postId })
+    .populate<{author: User}>('author')
+    .orFail()
+    .then((post) => {
+      return post.author;
+    });
+  const school = await School.findOne({
+    admin: await User.findOne({id: userId}),
+    members: postauthor,
+  });
+
+  return school !== null;
+}
