@@ -108,7 +108,6 @@ export const AccountProfile = ({ user, title, redirecturl }: Props) => {
   }
   return (
     <Form {...form}>
-    <h1>{title}</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="">
         <div className="flex gap-3">
           <div className="flex-[2]">
