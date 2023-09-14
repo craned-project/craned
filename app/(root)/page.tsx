@@ -22,11 +22,11 @@ export default async function Home({
       </SignedOut>
       <SignedIn>
         <div className="flex-[2]"></div>
-        <div className="flex-[3]">
+        <div className="flex-[5]">
           <div className="flex flex-col gap-2">
             {/* <Sidebar /> */}
             {posts.map((post) => (
-              <Test3 post={post} />
+              <Test3 post={post}/>
             ))}
             {pages > 1 ? (
               <Link href={`/?page=${pages - 1}`}>Go back</Link>

@@ -54,7 +54,7 @@ export default async function RootLayout({
                   {userInfo.name}
                 </span>
                 <span className="text-right text-gray-200 font-overpass text-sm">
-                  (@{userInfo.username})
+                  @{userInfo.username}
                 </span>
               </div>
               <Image
