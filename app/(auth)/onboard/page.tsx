@@ -5,7 +5,7 @@ import { AccountProfile } from "@/stories/AccountProfile";
 export default async function Page() {
   const user = await currentUser();
   if (!user) return null;
-  const userInfo = await FetchUser(user.id);
+  const userInfo = await FetchUser();
   if (userInfo?.onboarded) redirect("/");
   console.log(`userInfo: ${userInfo}, userid: ${user.id}`);
   const d = {
